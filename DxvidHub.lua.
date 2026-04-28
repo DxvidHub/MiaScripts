@@ -1,0 +1,187 @@
+-- DXVIDHUB | VERSIÓN FINAL PARA LA NUBE | SILENT AIM + ESP + SPEED
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+gui.Name = "DxvidHubRainbow"
+gui.Parent = player:WaitForChild("PlayerGui")
+gui.ResetOnSpawn = false
+
+-- VARIABLES
+local espEnabled = false
+local abierto = false
+
+-- ==========================================
+-- 1. BOTÓN PRINCIPAL (DISEÑO RAINBOW)
+-- ==========================================
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 150, 0, 38)
+mainFrame.Position = UDim2.new(0.5, -75, 0.1, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainFrame.BackgroundTransparency = 0.3
+mainFrame.Active = true
+mainFrame.Parent = gui
+
+local UserInputService = game:GetService("UserInputService")
+local dragging, dragInput, dragStart, startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+local corner = Instance.new("UICorner", mainFrame)
+corner.CornerRadius = UDim.new(0, 10)
+
+local stroke = Instance.new("UIStroke", mainFrame)
+stroke.Thickness = 2
+stroke.Color = Color3.fromRGB(255, 0, 0)
+
+local titleBtn = Instance.new("TextButton")
+titleBtn.Size = UDim2.new(1, 0, 1, 0)
+titleBtn.BackgroundTransparency = 1
+titleBtn.Text = "DxvidHub"
+titleBtn.Font = Enum.Font.GothamBold
+titleBtn.TextSize = 18
+titleBtn.Parent = mainFrame
+
+-- ARRASTRE PARA MOBILE/PC
+titleBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
+        end)
+    end
+end)
+
+titleBtn.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then update(input) end
+end)
+
+-- EFECTO RAINBOW
+spawn(function()
+    local hue = 0
+    while true do
+        hue = hue + 1/255
+        if hue > 1 then hue = 0 end
+        titleBtn.TextColor3 = Color3.fromHSV(hue, 1, 1)
+        wait()
+    end
+end)
+
+-- ==========================================
+-- 2. PANEL DE OPCIONES
+-- ==========================================
+local optionsFrame = Instance.new("Frame")
+optionsFrame.Size = UDim2.new(1, 0, 0, 135)
+optionsFrame.Position = UDim2.new(0, 0, 1, 5)
+optionsFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+optionsFrame.BackgroundTransparency = 0.4
+optionsFrame.Visible = false
+optionsFrame.Parent = mainFrame
+Instance.new("UICorner", optionsFrame)
+
+local layout = Instance.new("UIListLayout", optionsFrame)
+layout.Padding = UDim.new(0, 5)
+layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+-- SPEED (GOTHAM BOLD)
+local speedInput = Instance.new("TextBox", optionsFrame)
+speedInput.Size = UDim2.new(0.9, 0, 0, 30)
+speedInput.PlaceholderText = "Velocidad"
+speedInput.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedInput.Font = Enum.Font.GothamBold
+speedInput.TextSize = 14
+Instance.new("UICorner", speedInput)
+
+speedInput.FocusLost:Connect(function(enter)
+    if enter then
+        local s = tonumber(speedInput.Text)
+        if s and player.Character then player.Character.Humanoid.WalkSpeed = s end
+    end
+end)
+
+-- ESP MEJORADO (GOTHAM BOLD)
+local btnEsp = Instance.new("TextButton", optionsFrame)
+btnEsp.Size = UDim2.new(0.9, 0, 0, 30)
+btnEsp.Text = "ESP: OFF"
+btnEsp.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+btnEsp.TextColor3 = Color3.fromRGB(255, 255, 255)
+btnEsp.Font = Enum.Font.GothamBold
+btnEsp.TextSize = 14
+Instance.new("UICorner", btnEsp)
+
+btnEsp.MouseButton1Click:Connect(function()
+    espEnabled = not espEnabled
+    btnEsp.Text = espEnabled and "ESP: ON" or "ESP: OFF"
+    btnEsp.TextColor3 = espEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 255, 255)
+end)
+
+-- SILENT AIM (CON LIMPIEZA DE NOTIFICACIONES)
+local btnSilent = Instance.new("TextButton", optionsFrame)
+btnSilent.Size = UDim2.new(0.9, 0, 0, 30)
+btnSilent.Text = "Silent Aim"
+btnSilent.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+btnSilent.TextColor3 = Color3.fromRGB(255, 255, 255)
+btnSilent.Font = Enum.Font.GothamBold
+btnSilent.TextSize = 14
+Instance.new("UICorner", btnSilent)
+
+btnSilent.MouseButton1Click:Connect(function()
+    -- Bucle de limpieza para ocultar el cuadro de la foto
+    spawn(function()
+        for i = 1, 50 do
+            for _, v in pairs(player.PlayerGui:GetDescendants()) do
+                if v:IsA("TextLabel") and (v.Text:lower():find("silient") or v.Text:lower():find("activated")) then
+                    v.Parent.Parent.Visible = false
+                end
+            end
+            wait(0.1)
+        end
+    end)
+
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/badfacelivezz/Idkk/refs/heads/main/silient-aim-adukyyhub"))()
+    end)
+    btnSilent.TextColor3 = Color3.fromRGB(0, 255, 255)
+end)
+
+titleBtn.MouseButton1Up:Connect(function()
+    if not dragging then
+        abierto = not abierto
+        optionsFrame.Visible = abierto
+    end
+end)
+
+-- BUCLE ESP
+spawn(function()
+    while wait(1) do
+        if espEnabled then
+            for _, p in pairs(game.Players:GetPlayers()) do
+                if p ~= player and p.Character then
+                    local hl = p.Character:FindFirstChild("Dxvid_HL") or Instance.new("Highlight")
+                    hl.Name = "Dxvid_HL"
+                    hl.Parent = p.Character
+                    hl.FillColor = Color3.fromRGB(255, 0, 0)
+                    hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    hl.Enabled = true
+                end
+            end
+        else
+            for _, p in pairs(game.Players:GetPlayers()) do
+                if p.Character and p.Character:FindFirstChild("Dxvid_HL") then
+                    p.Character.Dxvid_HL.Enabled = false
+                end
+            end
+        end
+    end
+end)
