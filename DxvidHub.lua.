@@ -150,8 +150,8 @@ btnSilent.MouseButton1Click:Connect(function()
     end)
 
     pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/badfacelivezz/Idkk/refs/heads/main/silient-aim-adukyyhub"))()
-    end)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/DxvidHub/MiaScripts/main/Misilent.lua"))()
+end)
     btnSilent.TextColor3 = Color3.fromRGB(0, 255, 255)
 end)
 
