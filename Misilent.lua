@@ -1,9 +1,4 @@
-game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "Silient aim gun & knife",
-    Text = "Script Activated",
-    Duration = 5
-})
-
+--[by adukyy hub]--
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
@@ -35,26 +30,21 @@ local function getBestTarget()
     local target = nil
     local shortestDistance = math.huge
 
-    local myTeam = LocalPlayer:GetAttribute("Team")
-
-    for _, p in pairs(Players:GetPlayers()) do
-        local pTeam = p:GetAttribute("Team")
-
-        if p ~= LocalPlayer
-        and p.Character
-        and p.Character:FindFirstChild("Head")
-        and p.Character:FindFirstChild("Humanoid")
-        and p.Character.Humanoid.Health > 0
-        and (pTeam == nil or myTeam == nil or pTeam ~= myTeam) then
+    for _, v in pairs(Players:GetPlayers()) do
+        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("Head") and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
             
-            local pos, onScreen = Camera:WorldToViewportPoint(p.Character.Head.Position)
+            local isEnemy = (v.Team ~= LocalPlayer.Team or v.Team == nil)
 
-            if onScreen and isEnemyVisible(p.Character.Head) then
-                local distance = (Vector2.new(pos.X,pos.Y) - Vector2.new(Mouse.X,Mouse.Y)).Magnitude
+            if isEnemy then
+                local pos, onScreen = Camera:WorldToViewportPoint(v.Character.Head.Position)
 
-                if distance < shortestDistance then
-                    target = p.Character.Head
-                    shortestDistance = distance
+                if onScreen and isEnemyVisible(v.Character.Head) then
+                    local distance = (Vector2.new(pos.X,pos.Y) - Vector2.new(Mouse.X,Mouse.Y)).Magnitude
+
+                    if distance < shortestDistance then
+                        target = v.Character.Head
+                        shortestDistance = distance
+                    end
                 end
             end
         end
