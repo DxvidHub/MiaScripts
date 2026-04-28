@@ -1,10 +1,4 @@
-game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "Silient aim gun & knife",
-    Text = "Script Activated",
-    Duration = 5
-})
-
-local Players = game:GetService("Players")
+ocal Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local Camera = workspace.CurrentCamera
