@@ -1,4 +1,4 @@
-ocal Players = game:GetService("Players")
+rs = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local Camera = workspace.CurrentCamera
