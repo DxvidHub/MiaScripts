@@ -1,4 +1,4 @@
--- DXVIDHUB | VERSIÓN FINAL PARA LA NUBE | SILENT AIM + ESP + SPEED
+-- DXV1D | VERSIÓN FINAL PARA LA NUBE | SILENT AIM + ESP + SPEED
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "DXV1DRainbow"
@@ -39,7 +39,7 @@ stroke.Color = Color3.fromRGB(255, 0, 0)
 local titleBtn = Instance.new("TextButton")
 titleBtn.Size = UDim2.new(1, 0, 1, 0)
 titleBtn.BackgroundTransparency = 1
-titleBtn.Text = "DxvidHub"
+titleBtn.Text = "DXV1D" -- CAMBIADO: Antes decía DxvidHub
 titleBtn.Font = Enum.Font.GothamBold
 titleBtn.TextSize = 18
 titleBtn.Parent = mainFrame
@@ -126,7 +126,7 @@ btnEsp.MouseButton1Click:Connect(function()
     btnEsp.TextColor3 = espEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 255, 255)
 end)
 
--- SILENT AIM (CON LIMPIEZA DE NOTIFICACIONES)
+-- SILENT AIM (DXV1D VERSION)
 local btnSilent = Instance.new("TextButton", optionsFrame)
 btnSilent.Size = UDim2.new(0.9, 0, 0, 30)
 btnSilent.Text = "Silent Aim"
@@ -137,7 +137,6 @@ btnSilent.TextSize = 14
 Instance.new("UICorner", btnSilent)
 
 btnSilent.MouseButton1Click:Connect(function()
-    -- Bucle de limpieza para ocultar el cuadro de la foto
     spawn(function()
         for i = 1, 50 do
             for _, v in pairs(player.PlayerGui:GetDescendants()) do
@@ -150,8 +149,8 @@ btnSilent.MouseButton1Click:Connect(function()
     end)
 
     pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/DxvidHub/MiaScripts/main/Misilent.lua"))()
-end)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/DxvidHub/MiaScripts/main/Misilent.lua"))()
+    end)
     btnSilent.TextColor3 = Color3.fromRGB(0, 255, 255)
 end)
 
@@ -168,8 +167,8 @@ spawn(function()
         if espEnabled then
             for _, p in pairs(game.Players:GetPlayers()) do
                 if p ~= player and p.Character then
-                    local hl = p.Character:FindFirstChild("Dxvid_HL") or Instance.new("Highlight")
-                    hl.Name = "Dxvid_HL"
+                    local hl = p.Character:FindFirstChild("DXV1D_HL") or Instance.new("Highlight")
+                    hl.Name = "DXV1D_HL"
                     hl.Parent = p.Character
                     hl.FillColor = Color3.fromRGB(255, 0, 0)
                     hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
@@ -178,8 +177,8 @@ spawn(function()
             end
         else
             for _, p in pairs(game.Players:GetPlayers()) do
-                if p.Character and p.Character:FindFirstChild("Dxvid_HL") then
-                    p.Character.Dxvid_HL.Enabled = false
+                if p.Character and p.Character:FindFirstChild("DXV1D_HL") then
+                    p.Character.DXV1D_HL.Enabled = false
                 end
             end
         end
