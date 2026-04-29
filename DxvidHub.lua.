@@ -1,15 +1,24 @@
--- DXV1D | VERSIÓN MOVIMIENTO TOTAL | BORDES RGB + ARRASTRABLE
+-- DXV1D | VERSIÓN GITHUB OFICIAL V2 | CORRECIÓN RE-ACTIVACIÓN SPOOFER
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "DXV1DRainbow"
 gui.Parent = player:WaitForChild("PlayerGui")
 gui.ResetOnSpawn = false
 
+-- VARIABLES DE ESTADO
 local espEnabled = false
 local abierto = false
+local spoofEnabled = false 
+
+-- CONFIGURACIÓN DEL SPOOFER
+local TagColor = "#00FFFF" 
+local NombreMOD = '<font color="'..TagColor..'">[MOD]</font> DXV1D'
+local NombrePlano = "[MOD] DXV1D"
+local NombreReal = player.Name
+local DisplayReal = player.DisplayName
 
 -- ==========================================
--- 1. BOTÓN PRINCIPAL
+-- 1. BOTÓN PRINCIPAL Y ARRASTRE (SIN CAMBIOS)
 -- ==========================================
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
@@ -35,9 +44,6 @@ titleBtn.Font = Enum.Font.GothamBold
 titleBtn.TextSize = 18
 titleBtn.Parent = mainFrame
 
--- ==========================================
--- LÓGICA DE ARRASTRE DEFINITIVA (EN EL BOTÓN)
--- ==========================================
 local UserInputService = game:GetService("UserInputService")
 local dragging, dragInput, dragStart, startPos
 
@@ -46,17 +52,13 @@ local function update(input)
     mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
--- El secreto: El arrastre empieza en el titleBtn pero mueve el mainFrame
 titleBtn.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
         dragStart = input.Position
         startPos = mainFrame.Position
-        
         input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
         end)
     end
 end)
@@ -68,16 +70,14 @@ titleBtn.InputChanged:Connect(function(input)
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        update(input)
-    end
+    if input == dragInput and dragging then update(input) end
 end)
 
 -- ==========================================
 -- 2. PANEL DE OPCIONES
 -- ==========================================
 local optionsFrame = Instance.new("Frame")
-optionsFrame.Size = UDim2.new(1, 0, 0, 135)
+optionsFrame.Size = UDim2.new(1, 0, 0, 175)
 optionsFrame.Position = UDim2.new(0, 0, 1, 5)
 optionsFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 optionsFrame.BackgroundTransparency = 0.4
@@ -93,7 +93,18 @@ local layout = Instance.new("UIListLayout", optionsFrame)
 layout.Padding = UDim.new(0, 5)
 layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
--- SPEED
+local function crearBoton(texto)
+    local btn = Instance.new("TextButton", optionsFrame)
+    btn.Size = UDim2.new(0.9, 0, 0, 30)
+    btn.Text = texto
+    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 14
+    Instance.new("UICorner", btn)
+    return btn
+end
+
 local speedInput = Instance.new("TextBox", optionsFrame)
 speedInput.Size = UDim2.new(0.9, 0, 0, 30)
 speedInput.PlaceholderText = "Velocidad"
@@ -103,38 +114,57 @@ speedInput.Font = Enum.Font.GothamBold
 speedInput.TextSize = 14
 Instance.new("UICorner", speedInput)
 
-speedInput.FocusLost:Connect(function(enter)
-    if enter then
-        local s = tonumber(speedInput.Text)
-        if s and player.Character then player.Character.Humanoid.WalkSpeed = s end
+local btnEsp = crearBoton("ESP: OFF")
+local btnSpoof = crearBoton("Mod Spoofer: OFF")
+local btnSilent = crearBoton("Silent Aim")
+
+-- FUNCION DE REEMPLAZO (SPOOFER)
+local function AplicarEstiloReal(instancia)
+    if spoofEnabled and (instancia:IsA("TextLabel") or instancia:IsA("TextButton")) then
+        local texto = instancia.Text
+        if (string.find(texto, NombreReal) or string.find(texto, DisplayReal)) and not string.find(texto, "[MOD]") then
+            instancia.RichText = true 
+            instancia.Text = NombreMOD
+        end
     end
-end)
+end
 
--- ESP
-local btnEsp = Instance.new("TextButton", optionsFrame)
-btnEsp.Size = UDim2.new(0.9, 0, 0, 30)
-btnEsp.Text = "ESP: OFF"
-btnEsp.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-btnEsp.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnEsp.Font = Enum.Font.GothamBold
-btnEsp.TextSize = 14
-Instance.new("UICorner", btnEsp)
-
+-- LÓGICA DE BOTONES
 btnEsp.MouseButton1Click:Connect(function()
     espEnabled = not espEnabled
     btnEsp.Text = espEnabled and "ESP: ON" or "ESP: OFF"
     btnEsp.TextColor3 = espEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 255, 255)
+    if not espEnabled then
+        for _, p in pairs(game.Players:GetPlayers()) do
+            if p.Character and p.Character:FindFirstChild("DXV1D_HL") then
+                p.Character.DXV1D_HL:Destroy()
+            end
+        end
+    end
 end)
 
--- SILENT AIM
-local btnSilent = Instance.new("TextButton", optionsFrame)
-btnSilent.Size = UDim2.new(0.9, 0, 0, 30)
-btnSilent.Text = "Silent Aim"
-btnSilent.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-btnSilent.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnSilent.Font = Enum.Font.GothamBold
-btnSilent.TextSize = 14
-Instance.new("UICorner", btnSilent)
+btnSpoof.MouseButton1Click:Connect(function()
+    spoofEnabled = not spoofEnabled
+    btnSpoof.Text = spoofEnabled and "Mod Spoofer: ON" or "Mod Spoofer: OFF"
+    btnSpoof.TextColor3 = spoofEnabled and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(255, 255, 255)
+    
+    if spoofEnabled then
+        -- RE-APLICACIÓN INMEDIATA AL ACTIVAR
+        pcall(function()
+            player.DisplayName = NombrePlano
+            if player.Character then
+                if player.Character:FindFirstChildOfClass("Humanoid") then
+                    player.Character:FindFirstChildOfClass("Humanoid").DisplayName = NombrePlano
+                end
+                for _, v in ipairs(player.Character:GetDescendants()) do
+                    if v:IsA("TextLabel") then AplicarEstiloReal(v) end
+                end
+            end
+        end)
+    else
+        pcall(function() player.DisplayName = DisplayReal end)
+    end
+end)
 
 btnSilent.MouseButton1Click:Connect(function()
     pcall(function()
@@ -143,7 +173,13 @@ btnSilent.MouseButton1Click:Connect(function()
     btnSilent.TextColor3 = Color3.fromRGB(0, 255, 255)
 end)
 
--- FUNCIÓN PARA ABRIR (Al soltar el clic, solo si no se arrastró)
+speedInput.FocusLost:Connect(function(enter)
+    if enter then
+        local s = tonumber(speedInput.Text)
+        if s and player.Character then player.Character.Humanoid.WalkSpeed = s end
+    end
+end)
+
 titleBtn.MouseButton1Up:Connect(function()
     if not dragging then
         abierto = not abierto
@@ -152,7 +188,7 @@ titleBtn.MouseButton1Up:Connect(function()
 end)
 
 -- ==========================================
--- 3. BUCLE RGB
+-- 3. BUCLE MAESTRO (RGB + ESP + SPOOFER)
 -- ==========================================
 spawn(function()
     local hue = 0
@@ -160,16 +196,13 @@ spawn(function()
         hue = hue + 1/255
         if hue > 1 then hue = 0 end
         local color = Color3.fromHSV(hue, 1, 1)
+        
+        -- RGB Sync
         titleBtn.TextColor3 = color
         strokeMain.Color = color
         strokeOptions.Color = color
-        wait()
-    end
-end)
-
--- BUCLE ESP
-spawn(function()
-    while wait(1) do
+        
+        -- ESP Logic
         if espEnabled then
             for _, p in pairs(game.Players:GetPlayers()) do
                 if p ~= player and p.Character then
@@ -180,12 +213,30 @@ spawn(function()
                     hl.Enabled = true
                 end
             end
-        else
-            for _, p in pairs(game.Players:GetPlayers()) do
-                if p.Character and p.Character:FindFirstChild("DXV1D_HL") then
-                    p.Character.DXV1D_HL.Enabled = false
-                end
-            end
         end
+
+        -- Spoofer Logic (Bucle de mantenimiento)
+        if spoofEnabled then
+            pcall(function()
+                player.DisplayName = NombrePlano
+                if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+                    player.Character:FindFirstChildOfClass("Humanoid").DisplayName = NombrePlano
+                end
+                for _, v in ipairs(player.PlayerGui:GetDescendants()) do 
+                    if v:IsA("TextLabel") then AplicarEstiloReal(v) end 
+                end
+                for _, v in ipairs(game:GetService("CoreGui"):GetDescendants()) do 
+                    if v:IsA("TextLabel") then AplicarEstiloReal(v) end 
+                end
+            end)
+        end
+        
+        task.wait(0.3)
+    end
+end)
+
+game.DescendantAdded:Connect(function(obj)
+    if spoofEnabled and (obj:IsA("TextLabel") or obj:IsA("TextButton")) then
+        task.defer(AplicarEstiloReal, obj)
     end
 end)
