@@ -1,7 +1,7 @@
 -- DXVIDHUB | VERSIÓN FINAL PARA LA NUBE | SILENT AIM + ESP + SPEED
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
-gui.Name = "DxvidHubRainbow"
+gui.Name = "DXV1DRainbow"
 gui.Parent = player:WaitForChild("PlayerGui")
 gui.ResetOnSpawn = false
 
