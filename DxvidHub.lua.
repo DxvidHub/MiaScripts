@@ -1,17 +1,16 @@
--- DXV1D | VERSIÓN FINAL CON NAME SPOOFER | SILENT AIM + ESP + SPEED + SPOOFER
+-- DXV1D | VERSIÓN FINAL CORREGIDA | SILENT AIM + ESP + SPEED + SPOOFER AGRESIVO
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "DXV1DRainbow"
 gui.Parent = player:WaitForChild("PlayerGui")
 gui.ResetOnSpawn = false
 
--- VARIABLES
 local espEnabled = false
 local abierto = false
-local spoofEnabled = false -- Variable para el Spoofer
+local spoofEnabled = false 
 
 -- ==========================================
--- 1. BOTÓN PRINCIPAL (DISEÑO RAINBOW)
+-- 1. BOTÓN PRINCIPAL
 -- ==========================================
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
@@ -22,20 +21,8 @@ mainFrame.BackgroundTransparency = 0.3
 mainFrame.Active = true
 mainFrame.Parent = gui
 
-local UserInputService = game:GetService("UserInputService")
-local dragging, dragInput, dragStart, startPos
-
-local function update(input)
-    local delta = input.Position - dragStart
-    mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-
 local corner = Instance.new("UICorner", mainFrame)
 corner.CornerRadius = UDim.new(0, 10)
-
-local stroke = Instance.new("UIStroke", mainFrame)
-stroke.Thickness = 2
-stroke.Color = Color3.fromRGB(255, 0, 0)
 
 local titleBtn = Instance.new("TextButton")
 titleBtn.Size = UDim2.new(1, 0, 1, 0)
@@ -44,28 +31,6 @@ titleBtn.Text = "DXV1D"
 titleBtn.Font = Enum.Font.GothamBold
 titleBtn.TextSize = 18
 titleBtn.Parent = mainFrame
-
--- ARRASTRE
-titleBtn.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = mainFrame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then dragging = false end
-        end)
-    end
-end)
-
-titleBtn.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then update(input) end
-end)
 
 -- EFECTO RAINBOW
 spawn(function()
@@ -79,10 +44,10 @@ spawn(function()
 end)
 
 -- ==========================================
--- 2. PANEL DE OPCIONES (AJUSTADO EL TAMAÑO PARA EL NUEVO BOTÓN)
+-- 2. PANEL DE OPCIONES
 -- ==========================================
 local optionsFrame = Instance.new("Frame")
-optionsFrame.Size = UDim2.new(1, 0, 0, 170) -- Subimos a 170 para que quepan todos los botones
+optionsFrame.Size = UDim2.new(1, 0, 0, 170)
 optionsFrame.Position = UDim2.new(0, 0, 1, 5)
 optionsFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 optionsFrame.BackgroundTransparency = 0.4
@@ -94,64 +59,34 @@ local layout = Instance.new("UIListLayout", optionsFrame)
 layout.Padding = UDim.new(0, 5)
 layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
--- BOTÓN: SPEED
-local speedInput = Instance.new("TextBox", optionsFrame)
-speedInput.Size = UDim2.new(0.9, 0, 0, 30)
-speedInput.PlaceholderText = "Velocidad"
-speedInput.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-speedInput.Font = Enum.Font.GothamBold
-speedInput.TextSize = 14
-Instance.new("UICorner", speedInput)
+local function crearBoton(texto)
+    local btn = Instance.new("TextButton", optionsFrame)
+    btn.Size = UDim2.new(0.9, 0, 0, 30)
+    btn.Text = texto
+    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 14
+    Instance.new("UICorner", btn)
+    return btn
+end
 
-speedInput.FocusLost:Connect(function(enter)
-    if enter then
-        local s = tonumber(speedInput.Text)
-        if s and player.Character then player.Character.Humanoid.WalkSpeed = s end
-    end
-end)
+local btnEsp = crearBoton("ESP: OFF")
+local btnSpoof = crearBoton("Spoof Name: OFF")
+local btnSilent = crearBoton("Silent Aim")
 
--- BOTÓN: ESP
-local btnEsp = Instance.new("TextButton", optionsFrame)
-btnEsp.Size = UDim2.new(0.9, 0, 0, 30)
-btnEsp.Text = "ESP: OFF"
-btnEsp.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-btnEsp.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnEsp.Font = Enum.Font.GothamBold
-btnEsp.TextSize = 14
-Instance.new("UICorner", btnEsp)
-
+-- FUNCIONES DE LOS BOTONES
 btnEsp.MouseButton1Click:Connect(function()
     espEnabled = not espEnabled
     btnEsp.Text = espEnabled and "ESP: ON" or "ESP: OFF"
     btnEsp.TextColor3 = espEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 255, 255)
 end)
 
--- BOTÓN: NAME SPOOFER (DXV1D)
-local btnSpoof = Instance.new("TextButton", optionsFrame)
-btnSpoof.Size = UDim2.new(0.9, 0, 0, 30)
-btnSpoof.Text = "Spoof Name: OFF"
-btnSpoof.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-btnSpoof.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnSpoof.Font = Enum.Font.GothamBold
-btnSpoof.TextSize = 14
-Instance.new("UICorner", btnSpoof)
-
 btnSpoof.MouseButton1Click:Connect(function()
     spoofEnabled = not spoofEnabled
     btnSpoof.Text = spoofEnabled and "Spoof Name: ON" or "Spoof Name: OFF"
     btnSpoof.TextColor3 = spoofEnabled and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(255, 255, 255)
 end)
-
--- BOTÓN: SILENT AIM
-local btnSilent = Instance.new("TextButton", optionsFrame)
-btnSilent.Size = UDim2.new(0.9, 0, 0, 30)
-btnSilent.Text = "Silent Aim"
-btnSilent.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-btnSilent.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnSilent.Font = Enum.Font.GothamBold
-btnSilent.TextSize = 14
-Instance.new("UICorner", btnSilent)
 
 btnSilent.MouseButton1Click:Connect(function()
     pcall(function()
@@ -160,66 +95,51 @@ btnSilent.MouseButton1Click:Connect(function()
     btnSilent.TextColor3 = Color3.fromRGB(0, 255, 255)
 end)
 
-titleBtn.MouseButton1Up:Connect(function()
-    if not dragging then
-        abierto = not abierto
-        optionsFrame.Visible = abierto
-    end
+titleBtn.MouseButton1Click:Connect(function()
+    abierto = not abierto
+    optionsFrame.Visible = abierto
 end)
 
 -- ==========================================
--- 3. LÓGICA DEL NAME SPOOFER (DXV1D)
+-- 3. LÓGICA DE FONDO (SPOOFER + ESP)
 -- ==========================================
-local TagColor = "rgb(0, 255, 255)"
-local NuevoNombre = '<font color="'..TagColor..'">[MOD]</font> DXV1D'
-local NombrePlano = "[MOD] DXV1D"
+local NuevoNombre = "[MOD] DXV1D"
 local NombreReal = player.Name
 local DisplayReal = player.DisplayName
 
-local function AplicarEstilo(instancia)
-    if spoofEnabled and (instancia:IsA("TextLabel") or instancia:IsA("TextButton")) then
-        if string.find(instancia.Text, NombreReal) or string.find(instancia.Text, DisplayReal) then
-            instancia.RichText = true 
-            instancia.Text = string.gsub(instancia.Text, NombreReal, NuevoNombre)
-            instancia.Text = string.gsub(instancia.Text, DisplayReal, NuevoNombre)
-        end
-    end
-end
-
-game:GetService("CoreGui").DescendantAdded:Connect(AplicarEstilo)
-player.PlayerGui.DescendantAdded:Connect(AplicarEstilo)
-
--- BUCLE DE PERSISTENCIA (SPOOFER + ESP)
 spawn(function()
     while wait(0.5) do
-        -- Lógica Spoofer
-        if spoofEnabled then
-            pcall(function()
-                player.DisplayName = NombrePlano
+        pcall(function()
+            -- Lógica Spoofer Agresivo
+            if spoofEnabled then
+                player.DisplayName = NuevoNombre
                 if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-                    player.Character:FindFirstChildOfClass("Humanoid").DisplayName = NombrePlano
+                    player.Character:FindFirstChildOfClass("Humanoid").DisplayName = NuevoNombre
                 end
-                for _, v in ipairs(player.PlayerGui:GetDescendants()) do AplicarEstilo(v) end
-            end)
-        end
-        
-        -- Lógica ESP
-        if espEnabled then
+                -- Cambiar nombres en toda la interfaz
+                for _, v in pairs(player.PlayerGui:GetDescendants()) do
+                    if v:IsA("TextLabel") and (v.Text:find(NombreReal) or v.Text:find(DisplayReal)) then
+                        v.Text = NuevoNombre
+                    end
+                end
+            end
+
+            -- Lógica ESP
             for _, p in pairs(game.Players:GetPlayers()) do
                 if p ~= player and p.Character then
-                    local hl = p.Character:FindFirstChild("DXV1D_HL") or Instance.new("Highlight")
-                    hl.Name = "DXV1D_HL"
-                    hl.Parent = p.Character
-                    hl.FillColor = Color3.fromRGB(255, 0, 0)
-                    hl.Enabled = true
+                    local hl = p.Character:FindFirstChild("DXV1D_HL")
+                    if espEnabled then
+                        if not hl then
+                            hl = Instance.new("Highlight", p.Character)
+                            hl.Name = "DXV1D_HL"
+                            hl.FillColor = Color3.fromRGB(255, 0, 0)
+                        end
+                        hl.Enabled = true
+                    elseif hl then
+                        hl.Enabled = false
+                    end
                 end
             end
-        else
-            for _, p in pairs(game.Players:GetPlayers()) do
-                if p.Character and p.Character:FindFirstChild("DXV1D_HL") then
-                    p.Character.DXV1D_HL.Enabled = false
-                end
-            end
-        end
+        end)
     end
 end)
