@@ -1,0 +1,32 @@
+# 🚀 DXV1D HUB | OFFICIAL REPOSITORY
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Online-brightgreen?style=for-the-badge" alt="Status">
+  <img src="https://img.shields.io/badge/Version-9.2-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Safe-Verified-blueviolet?style=for-the-badge" alt="Safe">
+</p>
+
+---
+
+## 🎭 Sobre DXV1D HUB
+**DXV1D HUB** es un potente script multifuncional para Roblox, enfocado en ofrecer una ventaja competitiva con una interfaz moderna, limpia y fácil de usar. Desarrollado para ser ligero y eficiente.
+
+---
+
+## 🔥 Funciones Destacadas
+
+| Categoría | Funciones Incluidas |
+| :--- | :--- |
+| **⚡ Player** | Speed Input ajustable, WalkSpeed Toggle |
+| **👁️ Visuals** | ESP Highlights, FOV Changer (70-120) |
+| **🎯 Combat** | Perfect Shot, Silent Aim (Metatable method) |
+| **🛡️ System** | Anti-Copy Trap, RGB Interface, Drag & Drop |
+
+---
+
+## 📥 Ejecución (Loader Oficial)
+Copia el siguiente código y ejecútalo en tu exploit preferido (Solara, JJSploit, etc.):
+
+```lua
+-- [[ DXV1D OFFICIAL LOADER ]] --
+loadstring(game:HttpGet("[https://raw.githubusercontent.com/DxvidHub/MiaScripts/refs/heads/main/DXV1D_Main.lua](https://raw.githubusercontent.com/DxvidHub/MiaScripts/refs/heads/main/DXV1D_Main.lua)"))()
