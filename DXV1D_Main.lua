@@ -1,5 +1,4 @@
 -- [[ BY DXV1D ]] --
-
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -7,12 +6,10 @@ local LocalPlayer = game.Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local camera = workspace.CurrentCamera
 
--- 0. SISTEMA DE NOTIFICACIÓN
 local function ShowDiscordNotify()
     local NotifyGui = Instance.new("ScreenGui")
     NotifyGui.Name = "DiscordNotify"
     NotifyGui.Parent = game:GetService("CoreGui")
-
     local Frame = Instance.new("Frame")
     Frame.Size = UDim2.new(0, 260, 0, 115) 
     Frame.Position = UDim2.new(0.5, -130, 0, -120) 
@@ -20,12 +17,10 @@ local function ShowDiscordNotify()
     Frame.BorderSizePixel = 0
     Frame.Parent = NotifyGui
     Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 8)
-    
     local Stroke = Instance.new("UIStroke")
     Stroke.Thickness = 2
     Stroke.Color = Color3.fromRGB(88, 101, 242) 
     Stroke.Parent = Frame
-
     local Title = Instance.new("TextLabel")
     Title.Size = UDim2.new(1, 0, 0, 30)
     Title.Position = UDim2.new(0, 0, 0, 5)
@@ -35,7 +30,6 @@ local function ShowDiscordNotify()
     Title.TextColor3 = Color3.fromRGB(88, 101, 242)
     Title.TextSize = 16
     Title.Parent = Frame
-
     local Text = Instance.new("TextLabel")
     Text.Size = UDim2.new(1, 0, 0, 30)
     Text.Position = UDim2.new(0, 0, 0, 30)
@@ -45,7 +39,6 @@ local function ShowDiscordNotify()
     Text.TextColor3 = Color3.fromRGB(255, 255, 255)
     Text.TextSize = 13
     Text.Parent = Frame
-
     local CopyBtn = Instance.new("TextButton")
     CopyBtn.Size = UDim2.new(0, 100, 0, 30)
     CopyBtn.Position = UDim2.new(0.1, 0, 0.65, 0)
@@ -56,7 +49,6 @@ local function ShowDiscordNotify()
     CopyBtn.TextSize = 12
     CopyBtn.Parent = Frame
     Instance.new("UICorner", CopyBtn).CornerRadius = UDim.new(0, 4)
-
     local NoBtn = Instance.new("TextButton")
     NoBtn.Size = UDim2.new(0, 100, 0, 30)
     NoBtn.Position = UDim2.new(0.55, 0, 0.65, 0)
@@ -67,63 +59,50 @@ local function ShowDiscordNotify()
     NoBtn.TextSize = 12
     NoBtn.Parent = Frame
     Instance.new("UICorner", NoBtn).CornerRadius = UDim.new(0, 4)
-
     Frame:TweenPosition(UDim2.new(0.5, -130, 0.05, 0), "Out", "Back", 0.5, true)
-
     CopyBtn.MouseButton1Click:Connect(function()
         setclipboard("https://discord.gg/4H3hrTftb") 
         Frame:TweenPosition(UDim2.new(0.5, -130, 0, -120), "In", "Back", 0.4, true)
         task.wait(0.4)
         NotifyGui:Destroy()
     end)
-
     NoBtn.MouseButton1Click:Connect(function()
         Frame:TweenPosition(UDim2.new(0.5, -130, 0, -120), "In", "Back", 0.4, true)
         task.wait(0.4)
         NotifyGui:Destroy()
     end)
 end
-
 ShowDiscordNotify()
 
--- 1. BASE
 local DXV1D_GUI = Instance.new("ScreenGui")
 DXV1D_GUI.Name = "DXV1D_FinalSystem"
 DXV1D_GUI.Parent = game:GetService("CoreGui")
 DXV1D_GUI.IgnoreGuiInset = true
 
--- 2. EL LANZADOR
 local Launchpad = Instance.new("Frame")
 local LaunchCorner = Instance.new("UICorner")
 local LaunchStroke = Instance.new("UIStroke")
 local LogoImage = Instance.new("ImageLabel")
-
 Launchpad.Name = "Launchpad"
 Launchpad.Parent = DXV1D_GUI
 Launchpad.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Launchpad.Position = UDim2.new(0.1, 0, 0.5, 0) 
 Launchpad.Size = UDim2.new(0, 47, 0, 47) 
 Launchpad.Active = true
-
 LaunchCorner.CornerRadius = UDim.new(0, 10)
 LaunchCorner.Parent = Launchpad
-
 LaunchStroke.Parent = Launchpad
 LaunchStroke.Thickness = 2.5
 LaunchStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-
 LogoImage.Parent = Launchpad
 LogoImage.BackgroundTransparency = 1
 LogoImage.Image = "rbxassetid://103336031528183"
 LogoImage.Size = UDim2.new(0, 42, 0, 42)
 LogoImage.Position = UDim2.new(0.5, -21, 0.5, -21)
 LogoImage.ScaleType = Enum.ScaleType.Fit
-
--- 3. EL MENÚ CENTRAL
 local MainMenu = Instance.new("Frame")
 local MenuCorner = Instance.new("UICorner")
 local MenuStroke = Instance.new("UIStroke")
-
 MainMenu.Name = "MainMenu"
 MainMenu.Parent = DXV1D_GUI
 MainMenu.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
@@ -131,24 +110,18 @@ MainMenu.AnchorPoint = Vector2.new(0.5, 0.5)
 MainMenu.Position = UDim2.new(0.5, 0, 0.5, 0) 
 MainMenu.Size = UDim2.new(0, 450, 0, 300) 
 MainMenu.Visible = false 
-
 MenuCorner.CornerRadius = UDim.new(0, 12)
 MenuCorner.Parent = MainMenu
-
 MenuStroke.Parent = MainMenu
 MenuStroke.Thickness = 2.5
 MenuStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-
--- 4. PANEL LATERAL
 local SidePanel = Instance.new("Frame")
 SidePanel.Parent = MainMenu
 SidePanel.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
 SidePanel.Size = UDim2.new(0, 110, 1, 0)
-
 local SideCorner = Instance.new("UICorner")
 SideCorner.CornerRadius = UDim.new(0, 12)
 SideCorner.Parent = SidePanel
-
 local ScriptName = Instance.new("TextLabel")
 ScriptName.Name = "ScriptName"
 ScriptName.Parent = SidePanel
@@ -158,14 +131,11 @@ ScriptName.Size = UDim2.new(1, 0, 0, 40)
 ScriptName.Font = Enum.Font.LuckiestGuy 
 ScriptName.Text = "DXV1D"
 ScriptName.TextSize = 22
-
--- 5. BOTONES DE SISTEMA
 local SystemButtons = Instance.new("Frame")
 SystemButtons.Parent = MainMenu
 SystemButtons.BackgroundTransparency = 1
 SystemButtons.Position = UDim2.new(1, -70, 0, 10)
 SystemButtons.Size = UDim2.new(0, 60, 0, 25)
-
 local function CreateSysBtn(text, color, pos)
     local btn = Instance.new("TextButton")
     btn.Parent = SystemButtons
@@ -179,23 +149,18 @@ local function CreateSysBtn(text, color, pos)
     Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
     return btn
 end
-
 local CloseBtn = CreateSysBtn("X", Color3.fromRGB(150, 0, 0), UDim2.new(0, 35, 0, 0))
 local MinimizeBtn = CreateSysBtn("-", Color3.fromRGB(50, 50, 50), UDim2.new(0, 0, 0, 0))
-
--- 6. PESTAÑAS
 local TabBtnHolder = Instance.new("Frame")
 TabBtnHolder.Parent = SidePanel
 TabBtnHolder.BackgroundTransparency = 1
 TabBtnHolder.Position = UDim2.new(0, 0, 0, 60)
 TabBtnHolder.Size = UDim2.new(1, 0, 1, -60)
-
 local ContentHolder = Instance.new("Frame")
 ContentHolder.Parent = MainMenu
 ContentHolder.BackgroundTransparency = 1
 ContentHolder.Position = UDim2.new(0, 120, 0, 45)
 ContentHolder.Size = UDim2.new(1, -135, 1, -60)
-
 local function CreateTab(name, isDefault)
     local TabBtn = Instance.new("TextButton")
     TabBtn.Parent = TabBtnHolder
@@ -207,29 +172,24 @@ local function CreateTab(name, isDefault)
     TabBtn.TextColor3 = isDefault and Color3.fromRGB(0, 255, 150) or Color3.fromRGB(200, 200, 200)
     TabBtn.TextSize = 11
     Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 5)
-    
     local Stroke = Instance.new("UIStroke")
     Stroke.Thickness = 1
     Stroke.Color = isDefault and Color3.fromRGB(0, 255, 150) or Color3.fromRGB(40, 40, 40)
     Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     Stroke.Parent = TabBtn
-    
     local TabPage = Instance.new("ScrollingFrame")
     TabPage.Parent = ContentHolder
     TabPage.Size = UDim2.new(1, 0, 1, 0)
     TabPage.BackgroundTransparency = 1
     TabPage.Visible = isDefault
     TabPage.ScrollBarThickness = 0
-    
     local Layout = Instance.new("UIListLayout")
     Layout.Parent = TabPage
     Layout.Padding = UDim.new(0, 8)
     Layout.SortOrder = Enum.SortOrder.LayoutOrder
-    
     local Padding = Instance.new("UIPadding")
     Padding.Parent = TabPage
     Padding.PaddingTop = UDim.new(0, 15)
-
     TabBtn.MouseButton1Click:Connect(function()
         for _, v in pairs(ContentHolder:GetChildren()) do v.Visible = false end
         for _, v in pairs(TabBtnHolder:GetChildren()) do 
@@ -244,22 +204,16 @@ local function CreateTab(name, isDefault)
     end)
     return TabPage
 end
-
 local PlayerPage = CreateTab("Player", true)
 local EspPage = CreateTab("Esp", false)
 local AimPage = CreateTab("Aim", false)
 local VisualsPage = CreateTab("Visuals", false) 
 
--- ==========================================
--- SECCIÓN DE SPEED (INTEGRACIÓN EXACTA GITHUB)
--- ==========================================
 local speedEnabled = false
-
 local speedContainer = Instance.new("Frame")
 speedContainer.Parent = PlayerPage
 speedContainer.Size = UDim2.new(0.95, 0, 0, 35)
 speedContainer.BackgroundTransparency = 1
-
 local speedInput = Instance.new("TextBox")
 speedInput.Parent = speedContainer
 speedInput.Size = UDim2.new(0.60, 0, 1, 0)
@@ -271,7 +225,6 @@ speedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 speedInput.Font = Enum.Font.GothamBold
 speedInput.TextSize = 14
 Instance.new("UICorner", speedInput)
-
 local btnSpeedToggle = Instance.new("TextButton")
 btnSpeedToggle.Parent = speedContainer
 btnSpeedToggle.Size = UDim2.new(0.35, 0, 1, 0)
@@ -282,49 +235,15 @@ btnSpeedToggle.TextColor3 = Color3.fromRGB(255, 0, 0)
 btnSpeedToggle.Font = Enum.Font.GothamBold
 btnSpeedToggle.TextSize = 12
 Instance.new("UICorner", btnSpeedToggle)
-
 btnSpeedToggle.MouseButton1Click:Connect(function()
     speedEnabled = not speedEnabled
     btnSpeedToggle.Text = speedEnabled and "ON" or "OFF"
     btnSpeedToggle.TextColor3 = speedEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
-    
     if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-        if speedEnabled then
-            LocalPlayer.Character.Humanoid.WalkSpeed = tonumber(speedInput.Text) or 16
-        else
-            LocalPlayer.Character.Humanoid.WalkSpeed = 16
-        end
+        LocalPlayer.Character.Humanoid.WalkSpeed = speedEnabled and (tonumber(speedInput.Text) or 16) or 16
     end
 end)
 
--- ==========================================
--- LÓGICA FOV CHANGER
--- ==========================================
-local fovEnabled = false
-local btnFov = Instance.new("TextButton")
-btnFov.Parent = VisualsPage
-btnFov.Size = UDim2.new(0.95, 0, 0, 35)
-btnFov.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-btnFov.Font = Enum.Font.GothamBold
-btnFov.Text = "FOV Changer: OFF (70)"
-btnFov.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnFov.TextSize = 13
-Instance.new("UICorner", btnFov).CornerRadius = UDim.new(0, 6)
-local FovStroke = Instance.new("UIStroke", btnFov)
-FovStroke.Thickness = 1.2
-FovStroke.Color = Color3.fromRGB(55, 55, 55)
-
-btnFov.MouseButton1Click:Connect(function()
-    fovEnabled = not fovEnabled
-    camera.FieldOfView = fovEnabled and 120 or 70
-    btnFov.Text = fovEnabled and "FOV Changer: ON (120)" or "FOV Changer: OFF (70)"
-    btnFov.TextColor3 = fovEnabled and Color3.fromRGB(180, 100, 255) or Color3.fromRGB(255, 255, 255)
-    FovStroke.Color = fovEnabled and Color3.fromRGB(180, 100, 255) or Color3.fromRGB(55, 55, 55)
-end)
-
--- ==========================================
--- LÓGICA ESP
--- ==========================================
 local espEnabled = false
 local btnEsp = Instance.new("TextButton")
 btnEsp.Parent = EspPage
@@ -338,7 +257,6 @@ Instance.new("UICorner", btnEsp).CornerRadius = UDim.new(0, 6)
 local EspStroke = Instance.new("UIStroke", btnEsp)
 EspStroke.Thickness = 1.2
 EspStroke.Color = Color3.fromRGB(55, 55, 55)
-
 btnEsp.MouseButton1Click:Connect(function()
     espEnabled = not espEnabled
     btnEsp.Text = espEnabled and "ESP: ON" or "ESP: OFF"
@@ -351,12 +269,100 @@ btnEsp.MouseButton1Click:Connect(function()
     end
 end)
 
--- ==========================================
--- LÓGICA AIMBOT / SILENT AIM
--- ==========================================
+local spooferEnabled = false
+local btnSpoofer = Instance.new("TextButton")
+btnSpoofer.Parent = EspPage
+btnSpoofer.Size = UDim2.new(0.95, 0, 0, 35)
+btnSpoofer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+btnSpoofer.Font = Enum.Font.GothamBold
+btnSpoofer.Text = "Name Spoofer: OFF"
+btnSpoofer.TextColor3 = Color3.fromRGB(255, 255, 255)
+btnSpoofer.TextSize = 13
+Instance.new("UICorner", btnSpoofer).CornerRadius = UDim.new(0, 6)
+local SpooferStroke = Instance.new("UIStroke", btnSpoofer)
+SpooferStroke.Thickness = 1.2
+SpooferStroke.Color = Color3.fromRGB(55, 55, 55)
+
+local TagColor = "rgb(0, 255, 255)"
+local NuevoNombre = '<font color="'..TagColor..'">[MOD]</font> DXV1D'
+local NombrePlano = "[MOD] DXV1D"
+local NombreReal = LocalPlayer.Name
+local DisplayReal = LocalPlayer.DisplayName
+
+local function AplicarEstilo(instancia)
+    if not spooferEnabled then return end
+    if (instancia:IsA("TextLabel") or instancia:IsA("TextButton")) then
+        if string.find(instancia.Text, NombreReal) or string.find(instancia.Text, DisplayReal) then
+            instancia.RichText = true 
+            instancia.Text = string.gsub(instancia.Text, NombreReal, NuevoNombre)
+            instancia.Text = string.gsub(instancia.Text, DisplayReal, NuevoNombre)
+        end
+    end
+end
+
+local function MonitorizarInterfaz(parent)
+    parent.DescendantAdded:Connect(function(descendant)
+        if spooferEnabled then task.wait(0.1) AplicarEstilo(descendant) end
+    end)
+end
+MonitorizarInterfaz(LocalPlayer.PlayerGui)
+MonitorizarInterfaz(game:GetService("CoreGui"))
+
+task.spawn(function()
+    while true do
+        if spooferEnabled then
+            pcall(function()
+                if LocalPlayer.DisplayName ~= NombrePlano then LocalPlayer.DisplayName = NombrePlano end
+                local char = LocalPlayer.Character
+                if char then
+                    local hum = char:FindFirstChildOfClass("Humanoid")
+                    if hum and hum.DisplayName ~= NombrePlano then hum.DisplayName = NombrePlano end
+                    for _, v in ipairs(char:GetDescendants()) do
+                        if v:IsA("BillboardGui") or v:IsA("SurfaceGui") then
+                            for _, texto in ipairs(v:GetDescendants()) do AplicarEstilo(texto) end
+                        end
+                    end
+                end
+            end)
+        end
+        task.wait(0.5) 
+    end
+end)
+
+btnSpoofer.MouseButton1Click:Connect(function()
+    spooferEnabled = not spooferEnabled
+    btnSpoofer.Text = spooferEnabled and "Name Spoofer: ON" or "Name Spoofer: OFF"
+    btnSpoofer.TextColor3 = spooferEnabled and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(255, 255, 255)
+    SpooferStroke.Color = spooferEnabled and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(55, 55, 55)
+    if spooferEnabled then
+        for _, v in ipairs(LocalPlayer.PlayerGui:GetDescendants()) do AplicarEstilo(v) end
+    else
+        LocalPlayer.DisplayName = DisplayReal
+    end
+end)
+local fovEnabled = false
+local btnFov = Instance.new("TextButton")
+btnFov.Parent = VisualsPage
+btnFov.Size = UDim2.new(0.95, 0, 0, 35)
+btnFov.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+btnFov.Font = Enum.Font.GothamBold
+btnFov.Text = "FOV Changer: OFF (70)"
+btnFov.TextColor3 = Color3.fromRGB(255, 255, 255)
+btnFov.TextSize = 13
+Instance.new("UICorner", btnFov).CornerRadius = UDim.new(0, 6)
+local FovStroke = Instance.new("UIStroke", btnFov)
+FovStroke.Thickness = 1.2
+FovStroke.Color = Color3.fromRGB(55, 55, 55)
+btnFov.MouseButton1Click:Connect(function()
+    fovEnabled = not fovEnabled
+    camera.FieldOfView = fovEnabled and 120 or 70
+    btnFov.Text = fovEnabled and "FOV Changer: ON (120)" or "FOV Changer: OFF (70)"
+    btnFov.TextColor3 = fovEnabled and Color3.fromRGB(180, 100, 255) or Color3.fromRGB(255, 255, 255)
+    FovStroke.Color = fovEnabled and Color3.fromRGB(180, 100, 255) or Color3.fromRGB(55, 55, 55)
+end)
+
 getgenv().PerfectShot = false
 getgenv().SilentAim = false
-
 local function GetClosestPlayer()
     local target = nil
     local dist = math.huge
@@ -375,7 +381,6 @@ local function GetClosestPlayer()
     end
     return target
 end
-
 local mt = getrawmetatable(game)
 local oldIndex = mt.__index
 setreadonly(mt, false)
@@ -388,7 +393,6 @@ mt.__index = newcclosure(function(self, idx)
 end)
 setreadonly(mt, true)
 
--- BOTONES AIM
 local PerfectBtn = Instance.new("TextButton")
 PerfectBtn.Parent = AimPage
 PerfectBtn.Size = UDim2.new(0.95, 0, 0, 35)
@@ -427,7 +431,6 @@ SilentBtn.MouseButton1Click:Connect(function()
     SilentStroke.Color = getgenv().SilentAim and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(55, 55, 55)
 end)
 
--- [[ BUCLE MAESTRO ]] --
 task.spawn(function()
     local hue = 0
     while true do
@@ -452,7 +455,6 @@ task.spawn(function()
     end
 end)
 
--- [[ DRAG & CLICK ]] --
 local dragging, dragInput, dragStart, startPos
 local dragThreshold = 5
 Launchpad.InputBegan:Connect(function(input)
