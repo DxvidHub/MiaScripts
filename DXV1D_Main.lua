@@ -1,4 +1,4 @@
--- [[ DXV1D - MENÚ PRO V9.3 | PROTECCIÓN DE IDENTIDAD ACTIVADA ]] --
+-- [[ DXV1D - MENÚ PRO V9.2 | SPEED INPUT UPDATE ]] --
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -251,9 +251,10 @@ local AimPage = CreateTab("Aim", false)
 local VisualsPage = CreateTab("Visuals", false) 
 
 -- ==========================================
--- SECCIÓN DE SPEED (INTEGRACIÓN GITHUB)
+-- SECCIÓN DE SPEED (INTEGRACIÓN EXACTA GITHUB)
 -- ==========================================
 local speedEnabled = false
+
 local speedContainer = Instance.new("Frame")
 speedContainer.Parent = PlayerPage
 speedContainer.Size = UDim2.new(0.95, 0, 0, 35)
@@ -286,6 +287,7 @@ btnSpeedToggle.MouseButton1Click:Connect(function()
     speedEnabled = not speedEnabled
     btnSpeedToggle.Text = speedEnabled and "ON" or "OFF"
     btnSpeedToggle.TextColor3 = speedEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    
     if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
         if speedEnabled then
             LocalPlayer.Character.Humanoid.WalkSpeed = tonumber(speedInput.Text) or 16
@@ -296,9 +298,8 @@ btnSpeedToggle.MouseButton1Click:Connect(function()
 end)
 
 -- ==========================================
--- LÓGICA FOV CHANGER, ESP, AIMBOT...
+-- LÓGICA FOV CHANGER
 -- ==========================================
--- (Se mantiene igual para asegurar estabilidad)
 local fovEnabled = false
 local btnFov = Instance.new("TextButton")
 btnFov.Parent = VisualsPage
@@ -309,7 +310,21 @@ btnFov.Text = "FOV Changer: OFF (70)"
 btnFov.TextColor3 = Color3.fromRGB(255, 255, 255)
 btnFov.TextSize = 13
 Instance.new("UICorner", btnFov).CornerRadius = UDim.new(0, 6)
+local FovStroke = Instance.new("UIStroke", btnFov)
+FovStroke.Thickness = 1.2
+FovStroke.Color = Color3.fromRGB(55, 55, 55)
 
+btnFov.MouseButton1Click:Connect(function()
+    fovEnabled = not fovEnabled
+    camera.FieldOfView = fovEnabled and 120 or 70
+    btnFov.Text = fovEnabled and "FOV Changer: ON (120)" or "FOV Changer: OFF (70)"
+    btnFov.TextColor3 = fovEnabled and Color3.fromRGB(180, 100, 255) or Color3.fromRGB(255, 255, 255)
+    FovStroke.Color = fovEnabled and Color3.fromRGB(180, 100, 255) or Color3.fromRGB(55, 55, 55)
+end)
+
+-- ==========================================
+-- LÓGICA ESP
+-- ==========================================
 local espEnabled = false
 local btnEsp = Instance.new("TextButton")
 btnEsp.Parent = EspPage
@@ -320,11 +335,15 @@ btnEsp.Text = "ESP: OFF"
 btnEsp.TextColor3 = Color3.fromRGB(255, 255, 255)
 btnEsp.TextSize = 13
 Instance.new("UICorner", btnEsp).CornerRadius = UDim.new(0, 6)
+local EspStroke = Instance.new("UIStroke", btnEsp)
+EspStroke.Thickness = 1.2
+EspStroke.Color = Color3.fromRGB(55, 55, 55)
 
 btnEsp.MouseButton1Click:Connect(function()
     espEnabled = not espEnabled
     btnEsp.Text = espEnabled and "ESP: ON" or "ESP: OFF"
     btnEsp.TextColor3 = espEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 255, 255)
+    EspStroke.Color = espEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(55, 55, 55)
     if not espEnabled then
         for _, p in pairs(game.Players:GetPlayers()) do
             if p.Character and p.Character:FindFirstChild("DXV1D_HL") then p.Character.DXV1D_HL:Destroy() end
@@ -332,38 +351,83 @@ btnEsp.MouseButton1Click:Connect(function()
     end
 end)
 
--- LÓGICA DE AIMBOT (Simplificada para el ejemplo)
+-- ==========================================
+-- LÓGICA AIMBOT / SILENT AIM
+-- ==========================================
 getgenv().PerfectShot = false
+getgenv().SilentAim = false
+
+local function GetClosestPlayer()
+    local target = nil
+    local dist = math.huge
+    local center = camera.ViewportSize / 2
+    for _, v in ipairs(game.Players:GetPlayers()) do
+        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("Head") then
+            local hum = v.Character:FindFirstChildOfClass("Humanoid")
+            if hum and hum.Health > 0 then
+                local pos, visible = camera:WorldToViewportPoint(v.Character.Head.Position)
+                if visible then
+                    local d = (Vector2.new(pos.X, pos.Y) - center).Magnitude
+                    if d < dist then dist = d; target = v.Character.Head end
+                end
+            end
+        end
+    end
+    return target
+end
+
 local mt = getrawmetatable(game)
 local oldIndex = mt.__index
 setreadonly(mt, false)
 mt.__index = newcclosure(function(self, idx)
-    if getgenv().PerfectShot and not checkcaller() and (idx == "Hit" or idx == "Target") then
-        -- Aquí iría la lógica de Aim
+    if (getgenv().PerfectShot or getgenv().SilentAim) and not checkcaller() and (idx == "Hit" or idx == "Target") then
+        local head = GetClosestPlayer()
+        if head then return (idx == "Hit" and head.CFrame or head) end
     end
     return oldIndex(self, idx)
 end)
 setreadonly(mt, true)
 
--- [[ ⚠️ TRAMPA DE IDENTIDAD (EL GUARDAESPALDAS) ⚠️ ]] --
-task.spawn(function()
-    while task.wait(3) do -- Revisa cada 3 segundos
-        -- Si alguien cambia el texto "DXV1D" de la interfaz
-        if ScriptName.Text ~= "DXV1D" then
-            DXV1D_GUI:Destroy() -- Borra el menú
-            LocalPlayer:Kick("DXV1D Security: No intentes robar créditos.") -- Expulsa al ladrón
-            break
-        end
-        
-        -- Si intentan renombrar el objeto principal desde el Explorador
-        if DXV1D_GUI.Name ~= "DXV1D_FinalSystem" then
-            DXV1D_GUI:Destroy()
-            break
-        end
-    end
+-- BOTONES AIM
+local PerfectBtn = Instance.new("TextButton")
+PerfectBtn.Parent = AimPage
+PerfectBtn.Size = UDim2.new(0.95, 0, 0, 35)
+PerfectBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+PerfectBtn.Font = Enum.Font.GothamBold
+PerfectBtn.Text = "Perfect Shot: OFF"
+PerfectBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+PerfectBtn.TextSize = 13
+Instance.new("UICorner", PerfectBtn).CornerRadius = UDim.new(0, 6)
+local PerfectStroke = Instance.new("UIStroke", PerfectBtn)
+PerfectStroke.Thickness = 1.2
+PerfectStroke.Color = Color3.fromRGB(55, 55, 55)
+PerfectBtn.MouseButton1Click:Connect(function()
+    getgenv().PerfectShot = not getgenv().PerfectShot
+    PerfectBtn.Text = getgenv().PerfectShot and "Perfect Shot: ON" or "Perfect Shot: OFF"
+    PerfectBtn.TextColor3 = getgenv().PerfectShot and Color3.fromRGB(255, 255, 0) or Color3.fromRGB(255, 255, 255)
+    PerfectStroke.Color = getgenv().PerfectShot and Color3.fromRGB(255, 255, 0) or Color3.fromRGB(55, 55, 55)
 end)
 
--- [[ BUCLE MAESTRO: RGB ]] --
+local SilentBtn = Instance.new("TextButton")
+SilentBtn.Parent = AimPage
+SilentBtn.Size = UDim2.new(0.95, 0, 0, 35)
+SilentBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+SilentBtn.Font = Enum.Font.GothamBold
+SilentBtn.Text = "Silent Aim: OFF"
+SilentBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+SilentBtn.TextSize = 13
+Instance.new("UICorner", SilentBtn).CornerRadius = UDim.new(0, 6)
+local SilentStroke = Instance.new("UIStroke", SilentBtn)
+SilentStroke.Thickness = 1.2
+SilentStroke.Color = Color3.fromRGB(55, 55, 55)
+SilentBtn.MouseButton1Click:Connect(function()
+    getgenv().SilentAim = not getgenv().SilentAim
+    SilentBtn.Text = getgenv().SilentAim and "Silent Aim: ON" or "Silent Aim: OFF"
+    SilentBtn.TextColor3 = getgenv().SilentAim and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(255, 255, 255)
+    SilentStroke.Color = getgenv().SilentAim and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(55, 55, 55)
+end)
+
+-- [[ BUCLE MAESTRO ]] --
 task.spawn(function()
     local hue = 0
     while true do
@@ -372,20 +436,36 @@ task.spawn(function()
         LaunchStroke.Color = rainbow
         MenuStroke.Color = rainbow
         ScriptName.TextColor3 = rainbow
+        if espEnabled then
+            for _, p in ipairs(game.Players:GetPlayers()) do
+                if p ~= LocalPlayer and p.Character then
+                    local hl = p.Character:FindFirstChild("DXV1D_HL") or Instance.new("Highlight")
+                    hl.Name = "DXV1D_HL"
+                    hl.Parent = p.Character
+                    hl.FillColor = Color3.fromRGB(255, 0, 0)
+                    hl.OutlineColor = Color3.fromRGB(255, 255, 255)
+                    hl.Enabled = true
+                end
+            end
+        end
         task.wait()
     end
 end)
 
--- [[ DRAG & CLICK LOGIC ]] --
+-- [[ DRAG & CLICK ]] --
 local dragging, dragInput, dragStart, startPos
+local dragThreshold = 5
 Launchpad.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = false
         dragStart = input.Position
         startPos = Launchpad.Position
-        input.Changed:Connect(function()
+        local connection
+        connection = input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
+                connection:Disconnect()
                 if not dragging then MainMenu.Visible = true Launchpad.Visible = false end
+                dragging = false
             end
         end)
     end
@@ -393,7 +473,7 @@ end)
 Launchpad.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
         dragInput = input
-        if dragStart and (input.Position - dragStart).Magnitude > 5 then dragging = true end
+        if dragStart and (input.Position - dragStart).Magnitude > dragThreshold then dragging = true end
     end
 end)
 UserInputService.InputChanged:Connect(function(input)
@@ -402,7 +482,5 @@ UserInputService.InputChanged:Connect(function(input)
         Launchpad.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
-
 MinimizeBtn.MouseButton1Click:Connect(function() MainMenu.Visible = false Launchpad.Visible = true end)
 CloseBtn.MouseButton1Click:Connect(function() DXV1D_GUI:Destroy() end)
-
