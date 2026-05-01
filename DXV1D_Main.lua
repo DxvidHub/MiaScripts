@@ -1,4 +1,4 @@
--- [[ DXV1D - MENÚ PRO V9.2 | SPEED INPUT UPDATE ]] --
+-- [[ BY DXV1D ]] --
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
