@@ -464,7 +464,7 @@
 ‎                    local hl = p.Character:FindFirstChild("DXV1D_HL") or Instance.new("Highlight")
 ‎                    hl.Name = "DXV1D_HL"
 ‎                    hl.Parent = p.Character
-‎                    hl.FillColor = Color = Color3.fromRGB(255, 0, 0)
+‎                    hl.FillColor Color = Color3.fromRGB(255, 0, 0)
 ‎                    hl.OutlineColor = Color3.fromRGB(255, 255, 255)
 ‎                    hl.Enabled = true
 ‎                end
