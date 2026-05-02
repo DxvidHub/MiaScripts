@@ -508,22 +508,46 @@
 ‎MinimizeBtn.MouseButton1Click:Connect(function() MainMenu.Visible = false Launchpad.Visible = true end)
 ‎CloseBtn.MouseButton1Click:Connect(function() DXV1D_GUI:Destroy() end)
 ‎
-‎‎local BotonMVS = Instance.new("TextButton")
-‎BotonMVS.Name = "BotonMVS"
-‎BotonMVS.Size = UDim2.new(1, -10, 0, 37) 
-‎BotonMVS.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Un gris oscuro
-‎BotonMVS.Text = "MVS - DXVID EDITION"
-‎BotonMVS.TextColor3 = Color3.fromRGB(255, 255, 255)
-‎BotonMVS.Font = Enum.Font.GothamBold
-‎
-‎BotonMVS.Parent = ScriptsPage
+-- SECCIÓN DE AUTO-FARM EVENTO --
+local BotonFarm = Instance.new("TextButton")
+BotonFarm.Name = "BotonFarm"
+BotonFarm.Size = UDim2.new(1, -10, 0, 37)
+BotonFarm.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+BotonFarm.Text = "AUTO-FARM: OFF"
+BotonFarm.TextColor3 = Color3.fromRGB(255, 255, 255)
+BotonFarm.Font = Enum.Font.GothamBold
+BotonFarm.Parent = ScriptsPage 
 
-‎Instance.new("UICorner", BotonMVS).CornerRadius = UDim.new(0, 6)
-‎
-‎BotonMVS.MouseButton1Click:Connect(function()
-‎    BotonMVS.Text = "CARGANDO..."
-‎    AbrirMVS() -- La función que pegaste arriba
-‎    task.wait(1)
-‎    BotonMVS.Text = "ACTIVADO ✅"
-‎end)
-‎
+Instance.new("UICorner", BotonFarm).CornerRadius = UDim.new(0, 6)
+
+local farmToggle = false
+BotonFarm.MouseButton1Click:Connect(function()
+    farmToggle = not farmToggle
+    
+    if farmToggle then
+        BotonFarm.Text = "FARM: ACTIVADO ✅"
+        BotonFarm.BackgroundColor3 = Color3.fromRGB(0, 150, 70) 
+        
+        task.spawn(function()
+            while farmToggle do
+                local s = game.Workspace:FindFirstChild("Spawnables")
+                if s then
+                    local sc = s:FindFirstChild("SpawnablesClient")
+                    if sc then
+                        for _, item in pairs(sc:GetChildren()) do
+                            if not farmToggle then break end
+                            if item.Name == "Sombrero" and item:IsA("BasePart") then
+                                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, item, 0)
+                                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, item, 1)
+                            end
+                        end
+                    end
+                end
+                task.wait(1)
+            end
+        end)
+    else
+        BotonFarm.Text = "AUTO-FARM: OFF"
+        BotonFarm.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    end
+end)
