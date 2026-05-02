@@ -7,25 +7,24 @@
 ‎local camera = workspace.CurrentCamera
 ‎
 ‎local function AbrirMVS()
-    task.spawn(function()
-        local startTime = tick()
-        while tick() - startTime < 15 do 
-            for _, gui in pairs(game:GetService("CoreGui"):GetDescendants()) do
-                if gui:IsA("TextLabel") or gui:IsA("TextButton") then
-                    if gui.Text:find("FastDex") then
-                        gui.Text = gui.Text:gsub("FastDex", "DXVID-HUB")
-                    end
-                    if gui.Text:find("FrannnDev") and not gui.Text:find("DXVID &") then
-                        gui.Text = gui.Text:gsub("[Bb]y%s+FrannnDev", "By DXVID & FrannnDev")
-                    end
-                end
-            end
-            task.wait(0.5)
-        end
-    end)
-    loadstring(game:HttpGet("https://rawscripts.net/raw/DUELS-Murderers-VS-Sheriffs-MurderVsSheriff-OP-2025-52689"))()
-end
-
+‎    task.spawn(function()
+‎        local startTime = tick()
+‎        while tick() - startTime < 15 do 
+‎            for _, gui in pairs(game:GetService("CoreGui"):GetDescendants()) do
+‎                if gui:IsA("TextLabel") or gui:IsA("TextButton") then
+‎                    if gui.Text:find("FastDex") then
+‎                        gui.Text = gui.Text:gsub("FastDex", "DXVID-HUB")
+‎                    end
+‎                    if gui.Text:find("FrannnDev") and not gui.Text:find("DXVID &") then
+‎                        gui.Text = gui.Text:gsub("[Bb]y%s+FrannnDev", "By DXVID & FrannnDev")
+‎                    end
+‎                end
+‎            end
+‎            task.wait()
+‎        end
+‎    end)
+‎    loadstring(game:HttpGet("https://rawscripts.net/raw/DUELS-Murderers-VS-Sheriffs-MurderVsSheriff-OP-2025-52689"))()
+‎end
 ‎local function ShowDiscordNotify()
 ‎    local NotifyGui = Instance.new("ScreenGui")
 ‎    NotifyGui.Name = "DiscordNotify"
@@ -506,16 +505,15 @@ end
 ‎end)
 ‎MinimizeBtn.MouseButton1Click:Connect(function() MainMenu.Visible = false Launchpad.Visible = true end)
 ‎CloseBtn.MouseButton1Click:Connect(function() DXV1D_GUI:Destroy() end)
-‎-- [[ ESTO VA AL FINAL DE TODO EL SCRIPT ]]
 ‎
-‎local BotonMVS = Instance.new("TextButton")
+‎‎local BotonMVS = Instance.new("TextButton")
 ‎BotonMVS.Name = "BotonMVS"
 ‎BotonMVS.Size = UDim2.new(1, -10, 0, 37) 
 ‎BotonMVS.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Un gris oscuro
 ‎BotonMVS.Text = "MVS - DXVID EDITION"
 ‎BotonMVS.TextColor3 = Color3.fromRGB(255, 255, 255)
 ‎BotonMVS.Font = Enum.Font.GothamBold
-‎-- La línea de abajo es la que le dice que se meta en tu lista de botones:
+‎
 ‎BotonMVS.Parent = game:GetService("CoreGui").DXV1D_HUB.MainFrame.ButtonsFrame 
 ‎Instance.new("UICorner", BotonMVS).CornerRadius = UDim.new(0, 6)
 ‎
