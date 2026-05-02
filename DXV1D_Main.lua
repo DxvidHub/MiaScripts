@@ -23,8 +23,9 @@
             task.wait(0.5)
         end
     end)
-loadstring(game:HttpGet("https://rawscripts.net/raw/DUELS-Murderers-VS-Sheriffs-MurderVsSheriff-OP-2025-52689"))()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/DUELS-Murderers-VS-Sheriffs-MurderVsSheriff-OP-2025-52689"))()
 end
+
 ‎local function ShowDiscordNotify()
 ‎    local NotifyGui = Instance.new("ScreenGui")
 ‎    NotifyGui.Name = "DiscordNotify"
