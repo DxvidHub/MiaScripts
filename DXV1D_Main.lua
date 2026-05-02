@@ -227,7 +227,8 @@
 ‎local EspPage = CreateTab("Esp", false)
 ‎local AimPage = CreateTab("Aim", false)
 ‎local VisualsPage = CreateTab("Visuals", false) 
-‎
+‎local ScriptsPage = CreateTab("Scripts", false)
+
 ‎local speedEnabled = false
 ‎local speedContainer = Instance.new("Frame")
 ‎speedContainer.Parent = PlayerPage
@@ -515,7 +516,8 @@
 ‎BotonMVS.TextColor3 = Color3.fromRGB(255, 255, 255)
 ‎BotonMVS.Font = Enum.Font.GothamBold
 ‎
-‎BotonMVS.Parent = game:GetService("CoreGui").DXV1D_HUB.MainFrame.ButtonsFrame 
+‎BotonMVS.Parent = ScriptsPage
+
 ‎Instance.new("UICorner", BotonMVS).CornerRadius = UDim.new(0, 6)
 ‎
 ‎BotonMVS.MouseButton1Click:Connect(function()
