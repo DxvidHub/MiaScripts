@@ -6,25 +6,6 @@
 ‎local Mouse = LocalPlayer:GetMouse()
 ‎local camera = workspace.CurrentCamera
 ‎
-‎local function AbrirMVS()
-‎    task.spawn(function()
-‎        local startTime = tick()
-‎        while tick() - startTime < 15 do 
-‎            for _, gui in pairs(game:GetService("CoreGui"):GetDescendants()) do
-‎                if gui:IsA("TextLabel") or gui:IsA("TextButton") then
-‎                    if gui.Text:find("FastDex") then
-‎                        gui.Text = gui.Text:gsub("FastDex", "DXVID-HUB")
-‎                    end
-‎                    if gui.Text:find("FrannnDev") and not gui.Text:find("DXVID &") then
-‎                        gui.Text = gui.Text:gsub("[Bb]y%s+FrannnDev", "By DXVID & FrannnDev")
-‎                    end
-‎                end
-‎            end
-‎            task.wait()
-‎        end
-‎    end)
-‎    loadstring(game:HttpGet("https://rawscripts.net/raw/DUELS-Murderers-VS-Sheriffs-MurderVsSheriff-OP-2025-52689"))()
-‎end
 ‎local function ShowDiscordNotify()
 ‎    local NotifyGui = Instance.new("ScreenGui")
 ‎    NotifyGui.Name = "DiscordNotify"
