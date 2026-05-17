@@ -475,9 +475,12 @@ local OriginalAnims = {
 local function UpdateList(searchText)
     searchText = searchText:lower()
     
-    for _, item in pairs(Scroll:GetChildren()) do if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end end
-    for _, item in pairs(EmoteScroll:GetChildren()) do if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end end
-    for _, item in pairs(FavScroll:GetChildren()) do if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end end
+    for _, item in pairs(Scroll:GetChildren()) do 
+        if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
+    end
+    for _, item in pairs(EmoteScroll:GetChildren()) do 
+        if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
+    end
     
     if CurrentTab == "Animaciones" then
         for _, anim in pairs(OriginalAnims) do 
@@ -494,7 +497,7 @@ local function UpdateList(searchText)
     elseif CurrentTab == "Favoritos" then
         for _, emote in pairs(MisFavoritos) do 
             if emote.name:lower():find(searchText) then 
-                CreateEmoteButton(emote.name, emote.id, FavScroll) 
+                CreateEmoteButton(emote.name, emote.id, EmoteScroll) 
             end 
         end
     end
