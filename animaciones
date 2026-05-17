@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local LP = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
+local MisFavoritos = {} 
 
 local T = {
     bg     = Color3.fromRGB(0, 0, 0),
@@ -24,7 +25,7 @@ local MisEmotesPropios = {
     {name = "Vibracion de Viento",       id = 78837231553414},
     {name = "Agitacion Picante",         id = 111916364476573},
     {name = "Sacudida de Cadera",        id = 78311806903882},
-        {name = "Passinho de BH v2",         id = 117859247710011},
+    {name = "Passinho de BH v2",         id = 117859247710011},
     {name = "MM2 Falsa Pose Troll",      id = 125471731978058},
     {name = "MM2 Falso Muerto v1",       id = 115791293073752},
     {name = "MM2 Falso Muerto v2",       id = 107455374914007},
@@ -77,6 +78,13 @@ local MisEmotesPropios = {
     {name = "Toma la L (UGC)",           id = 125661832645257},
     {name = "El Mejor",                  id = 3762654854},
 }
+local function IsFavorite(id)
+    for _, f in pairs(MisFavoritos) do
+        if f.id == id then 
+            return true
+        end
+    end
+    return false
 
 
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
@@ -385,22 +393,60 @@ local function CreateButton(name, ids)
     end)
 end
 
-local function CreateEmoteButton(name, emoteId)
-    local Btn = Instance.new("TextButton", EmoteScroll)
-    Btn.Size = UDim2.new(1, -5, 0, 40)
+local function CreateEmoteButton(name, emoteId, targetScroll)
+    -- Contenedor invisible para que el botón y la estrella no se encimen
+    local FrameContainer = Instance.new("Frame", targetScroll or EmoteScroll)
+    FrameContainer.Size = UDim2.new(1, -5, 0, 40)
+    FrameContainer.BackgroundTransparency = 1
+
+    local Btn = Instance.new("TextButton", FrameContainer)
+    Btn.Size = UDim2.new(1, -45, 1, 0)
     Btn.Text = name
     Btn.BackgroundColor3 = T.panel
     Btn.TextColor3 = T.text
     Btn.Font = Enum.Font.GothamSemibold
     Btn.TextSize = 14
     Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 10)
-    Instance.new("UIStroke", Btn).Color = T.border
-    
+    local BtnStroke = Instance.new("UIStroke", Btn)
+    BtnStroke.Color = T.border
+    BtnStroke.Thickness = 1
+
     Btn.MouseButton1Click:Connect(function()
         PlayEmoteFE(name, emoteId)
         Btn.BackgroundColor3 = T.acc
         task.wait(0.2)
         Btn.BackgroundColor3 = T.panel
+    end)
+
+    local FavBtn = Instance.new("TextButton", FrameContainer)
+    FavBtn.Size = UDim2.new(0, 35, 1, 0)
+    FavBtn.Position = UDim2.new(1, -35, 0, 0)
+    FavBtn.BackgroundColor3 = T.panel
+    FavBtn.Text = IsFavorite(emoteId) and "★" or "☆"
+    FavBtn.TextColor3 = IsFavorite(emoteId) and Color3.fromRGB(255, 215, 0) or T.text
+    FavBtn.Font = Enum.Font.GothamBold
+    FavBtn.TextSize = 18
+    Instance.new("UICorner", FavBtn).CornerRadius = UDim.new(0, 10)
+    local FavStroke = Instance.new("UIStroke", FavBtn)
+    FavStroke.Color = T.border
+    FavStroke.Thickness = 1
+
+    FavBtn.MouseButton1Click:Connect(function()
+        if IsFavorite(emoteId) then
+            for i, f in pairs(MisFavoritos) do
+                if f.id == emoteId then 
+                    table.remove(MisFavoritos, i)
+                    break 
+                end
+            end
+            FavBtn.Text = "☆"
+            FavBtn.TextColor3 = T.text
+        else
+            table.insert(MisFavoritos, {name = name, id = emoteId})
+            FavBtn.Text = "★"
+            FavBtn.TextColor3 = Color3.fromRGB(255, 215, 0)
+        end
+        UpdateList(SearchBox.Text) 
     end)
 end
 
@@ -422,16 +468,27 @@ local OriginalAnims = {
 local function UpdateList(searchText)
     searchText = searchText:lower()
     
-    for _, item in pairs(Scroll:GetChildren()) do if item:IsA("Frame") then item:Destroy() end end
-    for _, item in pairs(EmoteScroll:GetChildren()) do if item:IsA("TextButton") then item:Destroy() end end
+    for _, item in pairs(Scroll:GetChildren()) do if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end end
+    for _, item in pairs(EmoteScroll:GetChildren()) do if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end end
+    for _, item in pairs(FavScroll:GetChildren()) do if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end end
     
     if CurrentTab == "Animaciones" then
-        for _, anim in pairs(OriginalAnims) do
-            if anim.name:lower():find(searchText) then CreateButton(anim.name, anim.ids) end
+        for _, anim in pairs(OriginalAnims) do 
+            if anim.name:lower():find(searchText) then 
+                CreateButton(anim.name, anim.ids) 
+            end 
         end
     elseif CurrentTab == "Emotes" then
-        for _, emote in pairs(MisEmotesPropios) do
-            if emote.name:lower():find(searchText) then CreateEmoteButton(emote.name, emote.id) end
+        for _, emote in pairs(MisEmotesPropios) do 
+            if emote.name:lower():find(searchText) then 
+                CreateEmoteButton(emote.name, emote.id, EmoteScroll) 
+            end 
+        end
+    elseif CurrentTab == "Favoritos" then
+        for _, emote in pairs(MisFavoritos) do 
+            if emote.name:lower():find(searchText) then 
+                CreateEmoteButton(emote.name, emote.id, FavScroll) 
+            end 
         end
     end
 end
