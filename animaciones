@@ -519,7 +519,6 @@ EmoteTabBtn.MouseButton1Click:Connect(function()
     CurrentTab = "Emotes"
     AnimPage.Visible = false
     EmotePage.Visible = true
-    FavScroll.Visible = false
     AnimTabBtn.BackgroundColor3 = T.panel
     EmoteTabBtn.BackgroundColor3 = T.acc
     FavTabBtn.BackgroundColor3 = T.panel
@@ -541,9 +540,7 @@ FavTabStroke.Thickness = 1.5
 FavTabBtn.MouseButton1Click:Connect(function()
     CurrentTab = "Favoritos"
     AnimPage.Visible = false
-    EmotePage.Visible = true -- Usamos tu misma página base
-    EmoteScroll.Visible = false
-    FavScroll.Visible = true
+    EmotePage.Visible = true
     AnimTabBtn.BackgroundColor3 = T.panel
     EmoteTabBtn.BackgroundColor3 = T.panel
     FavTabBtn.BackgroundColor3 = T.acc
