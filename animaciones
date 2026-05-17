@@ -263,6 +263,13 @@ Scroll.CanvasSize = UDim2.new(0,0,0,0)
 Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
 Scroll.ScrollBarThickness = 2
 Instance.new("UIListLayout", Scroll).Padding = UDim.new(0, 8)
+local FavScroll = Instance.new("ScrollingFrame", FavPage or EmotePage)
+FavScroll.Size = UDim2.new(1, 0, 1, 0)
+FavScroll.BackgroundTransparency = 1
+FavScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+FavScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+FavScroll.ScrollBarThickness = 2
+Instance.new("UIListLayout", FavScroll).Padding = UDim.new(0, 8)
 
 local EmoteScroll = Instance.new("ScrollingFrame", EmotePage)
 EmoteScroll.Size = UDim2.new(1, 0, 1, 0)
@@ -393,8 +400,8 @@ local function CreateButton(name, ids)
     end)
 end
 
-local function CreateEmoteButton(name, emoteId, targetScroll)
-    -- Contenedor invisible para que el botón y la estrella no se encimen
+local function CreateEmoteButton(name, emoteId, targetScroll
+
     local FrameContainer = Instance.new("Frame", targetScroll or EmoteScroll)
     FrameContainer.Size = UDim2.new(1, -5, 0, 40)
     FrameContainer.BackgroundTransparency = 1
@@ -496,15 +503,48 @@ end
 SearchBox:GetPropertyChangedSignal("Text"):Connect(function() UpdateList(SearchBox.Text) end)
 
 AnimTabBtn.MouseButton1Click:Connect(function()
-    CurrentTab = "Animaciones"; AnimPage.Visible = true; EmotePage.Visible = false
-    AnimTabBtn.BackgroundColor3 = T.acc; EmoteTabBtn.BackgroundColor3 = T.panel
-    SearchBox.Text = ""; UpdateList("")
+    CurrentTab = "Animaciones"
+    AnimPage.Visible = true
+    EmotePage.Visible = false
+    AnimTabBtn.BackgroundColor3 = T.acc
+    EmoteTabBtn.BackgroundColor3 = T.panel
+    FavTabBtn.BackgroundColor3 = T.panel
+    UpdateList(SearchBox.Text)
 end)
 
 EmoteTabBtn.MouseButton1Click:Connect(function()
-    CurrentTab = "Emotes"; AnimPage.Visible = false; EmotePage.Visible = true
-    AnimTabBtn.BackgroundColor3 = T.panel; EmoteTabBtn.BackgroundColor3 = T.acc
-    SearchBox.Text = ""; UpdateList("")
+    CurrentTab = "Emotes"
+    AnimPage.Visible = false
+    EmotePage.Visible = true
+    FavScroll.Visible = false
+    AnimTabBtn.BackgroundColor3 = T.panel
+    EmoteTabBtn.BackgroundColor3 = T.acc
+    FavTabBtn.BackgroundColor3 = T.panel
+    UpdateList(SearchBox.Text)
+end)
+
+local FavTabBtn = Instance.new("TextButton", TabHolder)
+FavTabBtn.Size = UDim2.new(1, 0, 0, 35)
+FavTabBtn.Text = "Favoritos"
+FavTabBtn.BackgroundColor3 = T.panel
+FavTabBtn.TextColor3 = T.text
+FavTabBtn.Font = Enum.Font.GothamBold
+FavTabBtn.TextSize = 12
+Instance.new("UICorner", FavTabBtn).CornerRadius = UDim.new(0, 6)
+local FavTabStroke = Instance.new("UIStroke", FavTabBtn)
+FavTabStroke.Color = T.border
+FavTabStroke.Thickness = 1.5
+
+FavTabBtn.MouseButton1Click:Connect(function()
+    CurrentTab = "Favoritos"
+    AnimPage.Visible = false
+    EmotePage.Visible = true -- Usamos tu misma página base
+    EmoteScroll.Visible = false
+    FavScroll.Visible = true
+    AnimTabBtn.BackgroundColor3 = T.panel
+    EmoteTabBtn.BackgroundColor3 = T.panel
+    FavTabBtn.BackgroundColor3 = T.acc
+    UpdateList(SearchBox.Text)
 end)
 
 UpdateList("")
