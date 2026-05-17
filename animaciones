@@ -446,6 +446,11 @@ Instance.new("UICorner", Min).CornerRadius = UDim.new(0, 8)
 Min.MouseButton1Click:Connect(function() Main.Visible = false; MinFrame.Visible = true end)
 
 LP.CharacterAdded:Connect(function()
-    task.wait(1)
-    if SelectedAnim.walk ~= 0 or SelectedAnim.idle1 ~= 0 then ApplyAnimsFE(SelectedAnim) end
+    local char = LP.Character or LP.CharacterAdded:Wait()
+    char:WaitForChild("Animate") -- Espera de forma segura a que cargue el motor de animaciones
+    task.wait(0.5) -- Mini retraso para asegurar que Roblox no lo sobrescriba
+    if SelectedAnim.walk and SelectedAnim.walk ~= 0 or SelectedAnim.idle1 and SelectedAnim.idle1 ~= 0 then 
+        ApplyAnimsFE(SelectedAnim) 
+    end
 end)
+
