@@ -1,0 +1,451 @@
+local Players = game:GetService("Players")
+local LP = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+
+local T = {
+    bg     = Color3.fromRGB(0, 0, 0),
+    panel  = Color3.fromRGB(15, 15, 15),
+    border = Color3.fromRGB(255, 0, 0),
+    acc    = Color3.fromRGB(255, 0, 0),
+    text   = Color3.fromRGB(255, 255, 255),
+}
+
+local SelectedAnim = {idle1=0, idle2=0, walk=0, run=0, jump=0, fall=0}
+local CurrentTab = "Animaciones" 
+
+local MisEmotesPropios = {
+    {name = "Rey Nasir OG",              id = 137261869876754},
+    {name = "Lagarto Lagarto Lagarto",   id = 127443047334116},
+    {name = "Toma la L",                 id = 73593666217037},
+    {name = "Surco de Jamal Brasil",     id = 104131847054135},
+    {name = "Shake Shake Da Hood",       id = 128485664532881},
+    {name = "Airbending",                id = 112732073090025},
+    {name = "Sacudida de Circulo",       id = 82268153441512},
+    {name = "Vibracion de Viento",       id = 78837231553414},
+    {name = "Agitacion Picante",         id = 111916364476573},
+    {name = "Sacudida de Cadera",        id = 78311806903882},
+    {name = "Bouncy Circle Dance 1",     id = 136017240587907},
+    {name = "DARE Gorillaz",             id = 78098763350986},
+    {name = "Bouncy Circle Dance 2",     id = 85122951730339},
+    {name = "Michael Myers",             id = 124114743921063},
+    {name = "Bouncy Hip Shake",          id = 122645491583006},
+    {name = "Discoteca Famoso",          id = 71724745881126},
+    {name = "Chica Vibey",               id = 131395672709312},
+    {name = "Muñeca Timida",             id = 86488579532756},
+    {name = "Ritmo del Rey Nasir",       id = 71473119200665},
+    {name = "MEJOR Rey Nasir",           id = 90716094172453},
+    {name = "Profesora Six Seven",       id = 121067193470437},
+    {name = "BEST SEIS SIETE 67",        id = 132746944328336},
+    {name = "67 seis siete v1",          id = 117403597701131},
+    {name = "67 seis siete v2",          id = 134984735013841},
+    {name = "67 BEST seis siete Meme",   id = 94285800716481},
+    {name = "OG MEJOR Baile Nasir",      id = 101589607324145},
+    {name = "Rey Nasir v2",              id = 132654138479098},
+    {name = "Rey Nasir v3",              id = 106586021943355},
+    {name = "Seis siete",                id = 115660245502265},
+    {name = "Baby Boo Big back 67",      id = 72384523642586},
+    {name = "SEIS SIETE EMOTE",          id = 132300889793532},
+    {name = "Aura Sin Cabeza",           id = 115636710550754},
+    {name = "Aura Nochalant",            id = 133995514450232},
+    {name = "Vuelo de Aura",             id = 107231572255639},
+    {name = "Cortisol Bajo",             id = 97601844378452},
+    {name = "Sukuna Aura",               id = 134893423132417},
+    {name = "Esse o Pique da Pista",     id = 138981301161267},
+    {name = "Abrazo",                    id = 121966388920366},
+    {name = "Rebote de Poke",            id = 107281732681902},
+    {name = "67 Baile Limitado",         id = 84959017797861},
+    {name = "Pragmata Diana",            id = 93887255524262},
+    {name = "Toma la L (UGC)",           id = 125661832645257},
+    {name = "El Mejor",                  id = 3762654854},
+}
+
+
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+ScreenGui.Name = "DXV1D_FINAL_PROPIO"
+ScreenGui.ResetOnSpawn = false
+
+local Main = Instance.new("Frame", ScreenGui)
+Main.Size = UDim2.new(0, 380, 0, 380) 
+Main.Position = UDim2.new(0.5, -190, 0.5, -190)
+Main.BackgroundColor3 = T.bg 
+Main.BorderSizePixel = 0
+Main.Active = true 
+Main.Draggable = true 
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 15)
+local MainStroke = Instance.new("UIStroke", Main)
+MainStroke.Thickness = 2.5
+MainStroke.Color = T.border
+
+local Title = Instance.new("TextLabel", Main)
+Title.Size = UDim2.new(0, 120, 0, 50)
+Title.Position = UDim2.new(0, 15, 0, 0)
+Title.Text = "DXV1D"
+Title.TextColor3 = T.acc
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 24
+Title.BackgroundTransparency = 1
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+local TabHolder = Instance.new("Frame", Main)
+TabHolder.Size = UDim2.new(0, 120, 1, -65) 
+TabHolder.Position = UDim2.new(0, 10, 0, 55)
+TabHolder.BackgroundTransparency = 1
+
+local TabLayout = Instance.new("UIListLayout", TabHolder)
+TabLayout.FillDirection = Enum.FillDirection.Vertical 
+TabLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+TabLayout.Padding = UDim.new(0, 8)
+
+local PagesHolder = Instance.new("Frame", Main)
+PagesHolder.Size = UDim2.new(1, -145, 1, -105) 
+PagesHolder.Position = UDim2.new(0, 135, 0, 95) 
+PagesHolder.BackgroundTransparency = 1
+
+local SearchBox = Instance.new("TextBox", Main)
+SearchBox.Size = UDim2.new(1, -145, 0, 30)
+SearchBox.Position = UDim2.new(0, 135, 0, 55)
+SearchBox.BackgroundColor3 = T.panel
+SearchBox.TextColor3 = T.text
+SearchBox.PlaceholderText = "Buscar..."
+SearchBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
+SearchBox.Font = Enum.Font.GothamSemibold
+SearchBox.TextSize = 13
+SearchBox.Text = ""
+Instance.new("UICorner", SearchBox).CornerRadius = UDim.new(0, 8)
+local SearchStroke = Instance.new("UIStroke", SearchBox)
+SearchStroke.Color = T.border
+SearchStroke.Thickness = 1
+
+local AnimPage = Instance.new("Frame", PagesHolder)
+AnimPage.Size = UDim2.new(1, 0, 1, 0)
+AnimPage.BackgroundTransparency = 1
+AnimPage.Visible = true 
+
+local EmotePage = Instance.new("Frame", PagesHolder)
+EmotePage.Size = UDim2.new(1, 0, 1, 0)
+EmotePage.BackgroundTransparency = 1
+EmotePage.Visible = false 
+
+local AnimTabBtn = Instance.new("TextButton", TabHolder)
+AnimTabBtn.Size = UDim2.new(1, 0, 0, 35) 
+AnimTabBtn.Text = "Animaciones"
+AnimTabBtn.BackgroundColor3 = T.acc 
+AnimTabBtn.TextColor3 = T.text
+AnimTabBtn.Font = Enum.Font.GothamBold
+AnimTabBtn.TextSize = 12
+Instance.new("UICorner", AnimTabBtn).CornerRadius = UDim.new(0, 6)
+local AnimTabStroke = Instance.new("UIStroke", AnimTabBtn)
+AnimTabStroke.Color = T.border
+AnimTabStroke.Thickness = 1.5
+
+local EmoteTabBtn = Instance.new("TextButton", TabHolder)
+EmoteTabBtn.Size = UDim2.new(1, 0, 0, 35) 
+EmoteTabBtn.Text = "Emotes"
+EmoteTabBtn.BackgroundColor3 = T.panel
+EmoteTabBtn.TextColor3 = T.text
+EmoteTabBtn.Font = Enum.Font.GothamBold
+EmoteTabBtn.TextSize = 12
+Instance.new("UICorner", EmoteTabBtn).CornerRadius = UDim.new(0, 6)
+local EmoteTabStroke = Instance.new("UIStroke", EmoteTabBtn)
+EmoteTabStroke.Color = T.border
+EmoteTabStroke.Thickness = 1.5
+
+local MinFrame = Instance.new("Frame", ScreenGui)
+MinFrame.Size = UDim2.new(0, 47, 0, 47)
+MinFrame.Position = UDim2.new(0.1, 0, 0.5, 0)
+MinFrame.BackgroundColor3 = T.bg
+MinFrame.Visible = false
+Instance.new("UICorner", MinFrame).CornerRadius = UDim.new(0, 10)
+Instance.new("UIStroke", MinFrame).Color = T.border
+
+local DragPad = Instance.new("TextButton", MinFrame)
+DragPad.Size = UDim2.new(1, 0, 1, 0)
+DragPad.BackgroundTransparency = 1
+DragPad.Text = "DX"
+DragPad.TextColor3 = T.acc
+DragPad.Font = Enum.Font.GothamBold
+DragPad.TextSize = 18
+
+local dragging, dragStart, startPos
+DragPad.InputBegan:Connect(function(input)
+    if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+        dragging = true
+        dragStart = input.Position
+        startPos = MinFrame.Position
+    end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        MinFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+DragPad.MouseButton1Click:Connect(function() Main.Visible = true; MinFrame.Visible = false end)
+
+local function ApplyAnimsFE(ids)
+    local char = LP.Character or LP.CharacterAdded:Wait()
+    local hum = char:WaitForChild("Humanoid")
+    local animate = char:WaitForChild("Animate")
+
+    if animate then
+        for _, v in pairs(hum:GetPlayingAnimationTracks()) do v:Stop(0.1) end
+        pcall(function()
+            if ids.idle1 then animate.idle.Animation1.AnimationId = "rbxassetid://"..tostring(ids.idle1) end
+            if ids.idle2 then animate.idle.Animation2.AnimationId = "rbxassetid://"..tostring(ids.idle2) end
+            if ids.walk then animate.walk.WalkAnim.AnimationId   = "rbxassetid://"..tostring(ids.walk) end
+            if ids.run then animate.run.RunAnim.AnimationId     = "rbxassetid://"..tostring(ids.run) end
+            if ids.jump then animate.jump.JumpAnim.AnimationId   = "rbxassetid://"..tostring(ids.jump) end
+            if ids.fall then animate.fall.FallAnim.AnimationId   = "rbxassetid://"..tostring(ids.fall) end
+        end)
+        animate.Enabled = false
+        task.wait(0.1)
+        animate.Enabled = true
+        hum:ChangeState(Enum.HumanoidStateType.Landed)
+    end
+end
+
+local function PlayEmoteFE(emoteName, emoteId)
+    pcall(function()
+        local humanoid = LP.Character and LP.Character:FindFirstChildOfClass("Humanoid")
+        local desc = humanoid and humanoid:FindFirstChildOfClass("HumanoidDescription")
+        
+        if desc then
+            local currentEmotes = desc:GetEmotes()
+            currentEmotes[emoteName] = {emoteId}
+            desc:SetEmotes(currentEmotes)
+            task.wait(0.05)
+            humanoid:PlayEmote(emoteName)
+        else
+            local anim = Instance.new("Animation")
+            anim.AnimationId = "rbxassetid://" .. tostring(emoteId)
+            local track = humanoid:LoadAnimation(anim)
+            track:Play()
+        end
+    end)
+end
+
+local Scroll = Instance.new("ScrollingFrame", AnimPage)
+Scroll.Size = UDim2.new(1, 0, 1, 0)
+Scroll.BackgroundTransparency = 1
+Scroll.CanvasSize = UDim2.new(0,0,0,0)
+Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Scroll.ScrollBarThickness = 2
+Instance.new("UIListLayout", Scroll).Padding = UDim.new(0, 8)
+
+local EmoteScroll = Instance.new("ScrollingFrame", EmotePage)
+EmoteScroll.Size = UDim2.new(1, 0, 1, 0)
+EmoteScroll.BackgroundTransparency = 1
+EmoteScroll.CanvasSize = UDim2.new(0,0,0,0)
+EmoteScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+EmoteScroll.ScrollBarThickness = 2
+Instance.new("UIListLayout", EmoteScroll).Padding = UDim.new(0, 8)
+
+local MenuModal = Instance.new("Frame", ScreenGui)
+MenuModal.Size = UDim2.new(0, 200, 0, 180)
+MenuModal.Position = UDim2.new(0.5, -100, 0.5, -90)
+MenuModal.BackgroundColor3 = T.bg
+MenuModal.Visible = false
+Instance.new("UICorner", MenuModal).CornerRadius = UDim.new(0, 12)
+local ModalStroke = Instance.new("UIStroke", MenuModal)
+ModalStroke.Thickness = 2
+ModalStroke.Color = T.border
+
+local ModalTitle = Instance.new("TextLabel", MenuModal)
+ModalTitle.Size = UDim2.new(1, 0, 0, 30)
+ModalTitle.BackgroundTransparency = 1
+ModalTitle.Text = "Elegir Partes"
+ModalTitle.TextColor3 = T.text
+ModalTitle.Font = Enum.Font.GothamBold
+ModalTitle.TextSize = 14
+
+local ModalList = Instance.new("Frame", MenuModal)
+ModalList.Size = UDim2.new(1, -20, 1, -40)
+ModalList.Position = UDim2.new(0, 10, 0, 30)
+ModalList.BackgroundTransparency = 1
+local ModalLayout = Instance.new("UIListLayout", ModalList)
+ModalLayout.Padding = UDim.new(0, 5)
+
+local ActiveTargetIds = nil
+
+local function CreateModalOption(label, key)
+    local OptBtn = Instance.new("TextButton", ModalList)
+    OptBtn.Size = UDim2.new(1, 0, 0, 25)
+    OptBtn.BackgroundColor3 = T.panel
+    OptBtn.Text = label
+    OptBtn.TextColor3 = T.text
+    OptBtn.Font = Enum.Font.GothamSemibold
+    OptBtn.TextSize = 12
+    Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 6)
+    local OptStroke = Instance.new("UIStroke", OptBtn)
+    OptStroke.Color = T.border
+    OptStroke.Thickness = 1
+
+    OptBtn.MouseButton1Click:Connect(function()
+        if ActiveTargetIds then
+            if key == "idle" then
+                SelectedAnim.idle1 = ActiveTargetIds.idle1
+                SelectedAnim.idle2 = ActiveTargetIds.idle2
+                ApplyAnimsFE({idle1 = ActiveTargetIds.idle1, idle2 = ActiveTargetIds.idle2})
+            else
+                SelectedAnim[key] = ActiveTargetIds[key]
+                local packet = {}
+                packet[key] = ActiveTargetIds[key]
+                ApplyAnimsFE(packet)
+            end
+            OptBtn.BackgroundColor3 = T.acc
+            task.wait(0.15)
+            OptBtn.BackgroundColor3 = T.panel
+            MenuModal.Visible = false
+        end
+    end)
+end
+
+CreateModalOption("Pose (Idle)", "idle")
+CreateModalOption("Caminar (Walk)", "walk")
+CreateModalOption("Correr (Run)", "run")
+CreateModalOption("Saltar (Jump)", "jump")
+CreateModalOption("Caer (Fall)", "fall")
+
+local CloseModal = Instance.new("TextButton", MenuModal)
+CloseModal.Size = UDim2.new(0, 20, 0, 20)
+CloseModal.Position = UDim2.new(1, -25, 0, 5)
+CloseModal.Text = "X"
+CloseModal.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+CloseModal.TextColor3 = T.text
+CloseModal.Font = Enum.Font.GothamBold
+CloseModal.TextSize = 10
+Instance.new("UICorner", CloseModal).CornerRadius = UDim.new(0, 4)
+CloseModal.MouseButton1Click:Connect(function() MenuModal.Visible = false end)
+
+local function CreateButton(name, ids)
+    local FrameContainer = Instance.new("Frame", Scroll)
+    FrameContainer.Size = UDim2.new(1, -5, 0, 40)
+    FrameContainer.BackgroundTransparency = 1
+
+    local Btn = Instance.new("TextButton", FrameContainer)
+    Btn.Size = UDim2.new(1, -45, 1, 0) 
+    Btn.Text = name
+    Btn.BackgroundColor3 = T.panel
+    Btn.TextColor3 = T.text
+    Btn.Font = Enum.Font.GothamSemibold
+    Btn.TextSize = 14
+    Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 10)
+    local BtnStroke = Instance.new("UIStroke", Btn)
+    BtnStroke.Color = T.border
+    BtnStroke.Thickness = 1
+    
+    Btn.MouseButton1Click:Connect(function()
+        SelectedAnim = {idle1=ids.idle1, idle2=ids.idle2, walk=ids.walk, run=ids.run, jump=ids.jump, fall=ids.fall}
+        ApplyAnimsFE(ids)
+        Btn.BackgroundColor3 = T.acc
+        task.wait(0.2)
+        Btn.BackgroundColor3 = T.panel
+    end)
+
+    local GearBtn = Instance.new("TextButton", FrameContainer)
+    GearBtn.Size = UDim2.new(0, 35, 1, 0)
+    GearBtn.Position = UDim2.new(1, -35, 0, 0)
+    GearBtn.BackgroundColor3 = T.panel
+    GearBtn.Text = "+"
+    GearBtn.TextColor3 = T.acc
+    GearBtn.Font = Enum.Font.GothamBold
+    GearBtn.TextSize = 18
+    Instance.new("UICorner", GearBtn).CornerRadius = UDim.new(0, 10)
+    local GearStroke = Instance.new("UIStroke", GearBtn)
+    GearStroke.Color = T.border
+    GearStroke.Thickness = 1
+
+    GearBtn.MouseButton1Click:Connect(function()
+        ActiveTargetIds = ids
+        MenuModal.Visible = true
+    end)
+end
+
+local function CreateEmoteButton(name, emoteId)
+    local Btn = Instance.new("TextButton", EmoteScroll)
+    Btn.Size = UDim2.new(1, -5, 0, 40)
+    Btn.Text = name
+    Btn.BackgroundColor3 = T.panel
+    Btn.TextColor3 = T.text
+    Btn.Font = Enum.Font.GothamSemibold
+    Btn.TextSize = 14
+    Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 10)
+    Instance.new("UIStroke", Btn).Color = T.border
+    
+    Btn.MouseButton1Click:Connect(function()
+        PlayEmoteFE(name, emoteId)
+        Btn.BackgroundColor3 = T.acc
+        task.wait(0.2)
+        Btn.BackgroundColor3 = T.panel
+    end)
+end
+
+local OriginalAnims = {
+    {name="Vampire", ids={idle1=1083445855, idle2=1083450166, walk=1083473930, run=1083462077, jump=1083455352, fall=1083443587}},
+    {name="Pirate", ids={idle1=750781874, idle2=750782770, walk=750785693, run=750783738, jump=750782230, fall=750780242}},
+    {name="Astronaut", ids={idle1=891621366, idle2=891633237, walk=891667138, run=891636393, jump=891627522, fall=891617961}},
+    {name="Ninja", ids={idle1=656117400, idle2=656118341, walk=656121766, run=656118852, jump=656117878, fall=656115606}},
+    {name="Mage", ids={idle1=707742142, idle2=707855907, walk=707897309, run=707861613, jump=707853694, fall=707829716}},
+    {name="Zombie", ids={idle1=616158929, idle2=616160636, walk=616168032, run=616163682, jump=616161997, fall=616157476}},
+    {name="Toy", ids={idle1=782841498, idle2=782845736, walk=782843345, run=782842708, jump=782847020, fall=782846423}},
+    {name="Levitation", ids={idle1=616006778, idle2=616008087, walk=616013216, run=616010382, jump=616008936, fall=616005863}},
+    {name="Robot", ids={idle1=616088211, idle2=616089559, walk=616095330, run=616091570, jump=616090535, fall=616087089}},
+    {name="Stylish", ids={idle1=616136790, idle2=616138447, walk=616146177, run=616140816, jump=616139451, fall=616134815}},
+    {name="Sneaky", ids={idle1=1132473842, idle2=1132477671, walk=1132510133, run=1132494274, jump=1132489853, fall=1132469004}},
+    {name="Princess", ids={idle1=941003647, idle2=941013098, walk=941028902, run=941015281, jump=941008832, fall=941000007}}
+}
+
+local function UpdateList(searchText)
+    searchText = searchText:lower()
+    
+    for _, item in pairs(Scroll:GetChildren()) do if item:IsA("Frame") then item:Destroy() end end
+    for _, item in pairs(EmoteScroll:GetChildren()) do if item:IsA("TextButton") then item:Destroy() end end
+    
+    if CurrentTab == "Animaciones" then
+        for _, anim in pairs(OriginalAnims) do
+            if anim.name:lower():find(searchText) then CreateButton(anim.name, anim.ids) end
+        end
+    elseif CurrentTab == "Emotes" then
+        for _, emote in pairs(MisEmotesPropios) do
+            if emote.name:lower():find(searchText) then CreateEmoteButton(emote.name, emote.id) end
+        end
+    end
+end
+
+SearchBox:GetPropertyChangedSignal("Text"):Connect(function() UpdateList(SearchBox.Text) end)
+
+AnimTabBtn.MouseButton1Click:Connect(function()
+    CurrentTab = "Animaciones"; AnimPage.Visible = true; EmotePage.Visible = false
+    AnimTabBtn.BackgroundColor3 = T.acc; EmoteTabBtn.BackgroundColor3 = T.panel
+    SearchBox.Text = ""; UpdateList("")
+end)
+
+EmoteTabBtn.MouseButton1Click:Connect(function()
+    CurrentTab = "Emotes"; AnimPage.Visible = false; EmotePage.Visible = true
+    AnimTabBtn.BackgroundColor3 = T.panel; EmoteTabBtn.BackgroundColor3 = T.acc
+    SearchBox.Text = ""; UpdateList("")
+end)
+
+UpdateList("")
+
+local Close = Instance.new("TextButton", Main)
+Close.Size = UDim2.new(0, 30, 0, 30); Close.Position = UDim2.new(1, -35, 0, 10); Close.Text = "X"
+Close.BackgroundColor3 = Color3.fromRGB(180, 0, 0); Close.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", Close).CornerRadius = UDim.new(0, 8)
+Close.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
+
+local Min = Instance.new("TextButton", Main)
+Min.Size = UDim2.new(0, 30, 0, 30); Min.Position = UDim2.new(1, -70, 0, 10); Min.Text = "-"
+Min.BackgroundColor3 = T.panel; Min.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", Min).CornerRadius = UDim.new(0, 8)
+Min.MouseButton1Click:Connect(function() Main.Visible = false; MinFrame.Visible = true end)
+
+LP.CharacterAdded:Connect(function()
+    task.wait(1)
+    if SelectedAnim.walk ~= 0 or SelectedAnim.idle1 ~= 0 then ApplyAnimsFE(SelectedAnim) end
+end)
