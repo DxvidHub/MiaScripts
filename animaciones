@@ -480,13 +480,11 @@ local function UpdateList(searchText)
             if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
         end
     end
-    
     if emotescroll then
         for _, item in pairs(emotescroll:GetChildren()) do 
             if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
         end
     end
-    
     if favscroll then
         for _, item in pairs(favscroll:GetChildren()) do 
             if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
