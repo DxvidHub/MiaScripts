@@ -475,29 +475,40 @@ local OriginalAnims = {
 local function UpdateList(searchText)
     searchText = searchText:lower()
     
-    for _, item in pairs(Scroll:GetChildren()) do 
-        if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
-    end
-    for _, item in pairs(EmoteScroll:GetChildren()) do 
-        if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
+    if scroll then
+        for _, item in pairs(scroll:GetChildren()) do 
+            if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
+        end
     end
     
-    if CurrentTab == "Animaciones" then
+    if emotescroll then
+        for _, item in pairs(emotescroll:GetChildren()) do 
+            if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
+        end
+    end
+    
+    if favscroll then
+        for _, item in pairs(favscroll:GetChildren()) do 
+            if item:IsA("Frame") or item:IsA("TextButton") then item:Destroy() end 
+        end
+    end
+    
+    if CurrentTab == "Animaciones" and scroll then
         for _, anim in pairs(OriginalAnims) do 
             if anim.name:lower():find(searchText) then 
                 CreateButton(anim.name, anim.ids) 
             end 
         end
-    elseif CurrentTab == "Emotes" then
+    elseif CurrentTab == "Emotes" and emotescroll then
         for _, emote in pairs(MisEmotesPropios) do 
             if emote.name:lower():find(searchText) then 
-                CreateEmoteButton(emote.name, emote.id, EmoteScroll) 
+                CreateEmoteButton(emote.name, emote.id, emotescroll) 
             end 
         end
-    elseif CurrentTab == "Favoritos" then
+    elseif CurrentTab == "Favoritos" and favscroll then
         for _, emote in pairs(MisFavoritos) do 
             if emote.name:lower():find(searchText) then 
-                CreateEmoteButton(emote.name, emote.id, EmoteScroll) 
+                CreateEmoteButton(emote.name, emote.id, favscroll) 
             end 
         end
     end
