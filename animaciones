@@ -3,17 +3,18 @@ local LP = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 
 local OriginalAnims = {
-    {
-        name = "Vampire",
-        ids = {
-            idle1 = 1083445855,
-            idle2 = 1083450166,
-            walk  = 1083473930,
-            run   = 1083462077,
-            jump  = 1083455352,
-            fall  = 1083443587
-        }
-    }
+    {name="Vampire", ids={idle1=1083445855, idle2=1083450166, walk=1083473930, run=1083462077, jump=1083455352, fall=1083443587}},
+    {name="Pirate", ids={idle1=750781874, idle2=750782770, walk=750785693, run=750783738, jump=750782230, fall=750780242}},
+    {name="Astronaut", ids={idle1=891621366, idle2=891633237, walk=891667138, run=891636393, jump=891627522, fall=891617961}},
+    {name="Ninja", ids={idle1=656117400, idle2=656118341, walk=656121766, run=656118852, jump=656117878, fall=656115606}},
+    {name="Mage", ids={idle1=707742142, idle2=707855907, walk=707897309, run=707861613, jump=707853694, fall=707829716}},
+    {name="Zombie", ids={idle1=616158929, idle2=616160636, walk=616168032, run=616163682, jump=616161997, fall=616157476}},
+    {name="Toy", ids={idle1=782841498, idle2=782845736, walk=782843345, run=782842708, jump=782847020, fall=782846423}},
+    {name="Levitation", ids={idle1=616006778, idle2=616008087, walk=616013216, run=616010382, jump=616008936, fall=616005863}},
+    {name="Robot", ids={idle1=616088211, idle2=616089559, walk=616095330, run=616091570, jump=616090535, fall=616087089}},
+    {name="Stylish", ids={idle1=616136790, idle2=616138447, walk=616146177, run=616140816, jump=616139451, fall=616134815}},
+    {name="Sneaky", ids={idle1=1132473842, idle2=1132477671, walk=1132510133, run=1132494274, jump=1132489853, fall=1132469004}},
+    {name="Princess", ids={idle1=941003647, idle2=941013098, walk=941028902, run=941015281, jump=941008832, fall=941000007}}
 }
 
 local MisEmotesPropios = {
